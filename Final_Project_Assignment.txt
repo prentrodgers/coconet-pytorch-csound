@@ -1,0 +1,1704 @@
+Start up the csound environment
+From the VsCode terminal:
+      flatpak-spawn --host toolbox enter csound
+or using an alias:
+      toolbox enter csound # new way to do it. That only works if you make the alias universal
+Start it up from the host terminal session:
+      toolbox enter csound
+On either system:      
+      conda activate gym 
+      cd Dropbox/csound
+or:
+      /home/prent/Dropbox/Tutorials/Deep Learning and Reinforcement Learning      
+      jupyter lab
+---------------------------------------
+Assignment:      
+
+One of the main objectives of this course is to help you gain hands-on experience in communicating insightful and impactful findings to stakeholders. In this project you will use the tools and techniques you learned throughout this course to use deep learning for a task of your choosing. It can be any Deep Learning application for supervised or unsupervised learning. You choose to work on a classification, image, or text application on a data set that you feel passionate about. Then, you will tweak your deep learning model to best suits your needs, and communicate insights you found from your model development exercise.
+
+Write your report from the perspective of a Chief Data Officer or the Head of Analytics of your team and will assess whether the Deep Learning model you selected best helped you achieve the main objective of your analysis.
+
+Yes, you are expected to leverage a wide variety of tools, but this report should focus on presenting findings, insights, and next steps. You may include some visuals from your code output, but this report is intended as a summary of your findings, not a code review. Optionally, you can submit your code as a python notebook or as a print out in the appendix of your document.
+
+The grading will center around 5 main points:
+
+      Does the report include a section describing the data?
+      Does the report include a paragraph detailing the main objective(s) of this analysis?
+      Does the report include a section with variations of a Deep Learning model and specifies which one is the model that best suits the main objective(s) of this analysis?
+      Does the report include a clear and well presented section with key findings related to the main objective(s) of the analysis?
+      Does the report highlight possible flaws in the model and a plan of action to revisit this analysis with additional data or different predictive modeling techniques?
+
+Setup instructions:
+
+Before you begin, you will need to choose a data set that you feel passionate about. You can brainstorm with your peers about great public data sets using the discussion board in this module.
+
+How to submit:
+
+The format of your work must adhere to the following guidelines. The report should be submitted as a pdf. Optionally, you can include a python notebook with code.
+
+Make sure to include mainly insights and findings on your report. There is no need to include code, unless you want to.
+
+Optional: find your own data set
+As a suggested first step, spend some time finding a data set that you are really passionate about. This can be a data set similar to the data you have available at work or data you have always wanted to analyze. For some people this will be sports data sets, while some other folks prefer to focus on data from a datathon or data for good. I choose the Aria from Bach's Goldberg Vatiations which is represented here: goldberg_aria.csv
+
+Optional: participate in a discussion board
+As an optional step, go into a discussion board and brainstorm with your peers great data sets to analyze. If you prefer to skip this step, feel free to use the Ames housing data set or the Churn phone data set that we used throughout the course.
+
+Required
+Once you have selected a data set, you will produce the deliverables listed below and submit them to one of your peers for review. Treat this exercise as an opportunity to produce analysis that are ready to highlight your analytical skills for a senior audience, for example, the Chief Data Officer, or the Head of Analytics at your company.
+
+Sections required in your report:
+
+Main objective of the analysis that specifies whether your model will be focused on a specific type of Deep Learning or Reinforcement Learning algorithm and the benefits that your analysis brings to the business or stakeholders of this data.
+
+Brief description of the data set you chose, a summary of its attributes, and an outline of what you are trying to accomplish with this analysis.
+
+Brief summary of data exploration and actions taken for data cleaning or feature engineering.
+
+Summary of training at least three variations of the Deep Learning model you selected.  For example, you can use different clustering techniques or different hyperparameters.
+
+A paragraph explaining which of your Deep Learning models you recommend as a final model that best fits your needs in terms of accuracy or explainability.
+
+Summary Key Findings and Insights, which walks your reader through the main findings of your modeling exercise.
+
+Suggestions for next steps in analyzing this data, which may include suggesting revisiting this model or adding specific data features to achieve a better model.
+
+FAQs
+Here are frequently asked questions about the assignment and review process. Please read these before starting your assignment.
+
+Do I have to come up with my own data set?
+
+You are highly encouraged to find a data set you feel really passionate about. This will help you showcase analytical work that truly matches your skills. But if you prefer, you can use some of the data sets from this course.
+
+Is it OK to choose the same data set as someone else?
+
+Yes, more than one person can analyze the same data set. Most likely your insights will be different from your peers and you will still be able to showcase your own talent as a unique solution.
+
+Do I have to train more than 3 different models?
+
+It is highly recommended that you try at least three different models to highlight which tool or technique helped you address the main objective of your analysis.
+
+Is this an individual assignment?
+
+You can ask for help or assistance on technical issues and general direction of your analysis, but the interpretation of the analytical output and the writing of the report should be your own.
+----------------------------------------
+Source dataset is a transcription of the Aria or Theme from the Goldberg Variations by Bach: goldberg_aria.csv 
+It consists of 428 rows, where each row represents a note of the piece, and each column describes how the note should be played.
+Objectives of the Analysis: Come up with several variations on the theme that extract some unique characteristic of the theme and transform it in some way that produces new original music that is interesting to listen to.
+Description of the data: The file is a csv of each of the 428 notes in the Aria as a row of data. Each row is a note to be played. Each row contains information on how the note is to be played. The colums contain characteristics of the note. These include the following: 
+"Start": When it starts. This is a time stamp that roughly corresponds 10 events per second. Since most performers are vey liberal with time, this permits great flexibility about when each note starts.
+"Dur": How long it lasts in the same time value as the start variable.
+"Vel": the velocity of key attack, which affects the loudness of the note, which in turn dictates which sample shoule be used to play it. The sample set used has 10 different volume levels for all 44 different pitches across the 88 keys in a normal grand piano.
+"Ton": the pitch of the note expressed as on of 214 pitches in the octave using Just Intonation to the 31-limit. Instead of limiting the performer to the normal 12 tones per octave, this permits more flexibility as to the specific pitch to use. 
+"Oct": the octave of the note 
+"Voice": what instrument sample set to be used. In this case, I am using a piano so all notes have the same voice 
+"Stere": where the sound should appear in the stereo sonic field from left to right.
+"Envlp": the amplitude envelope of the note pointing to a vector of values for amplitudes over the length of the note. There are about a dozen different envelope vectors available.
+"Gliss": if the note should change during the playing, this points to a vector of values that increase or decrease the pitch over the length of the note. This is used for trills and trillo, mordant, glissandi, and other pitch alterations. There are several hundred different pitch vectors to chose from based on the needs of the music.
+"UpSamp": if the note should chose a higher or lower sample than usually called for. The sample set contains a waveform for every other note in the 88 key piano at 10 differnt volume levels. If a higher than usual sample is chosen, the pitch is more mellow, and if a lower sample is picked the sound is harsher.
+"R-Env": if the note should have a separate envelope for the right channel than the over all audio envlope, that can cause a sound to appear to move across the audio field. 
+"2nd-gl", "3rd-gl": these are two additional pitch modification factors that can shift a pitch at the same time as the other pitch alteration vector. Combinations of vectors can produce complex pitch changes.
+"Mult": There is an additional volume modification factor that affects the output volume without affecting which of the 10 samples for each note is used. In this way a very soft sample can be played loudly, and a very loud sample can be played quitely.
+"chan": This is a value that separates the input notes by channel, which can be used to simplify complex passages that might have many voices running independently.
+
+Header row from the csv file: "Start","Dur","Vel","Ton","Oct","Voice","Stere","Envlp","Gliss","Upsamp","R-Env","2nd-gl","3rd-gl","Mult","chan"
+
+I have created a program that takes that csv file and creates input to a music sythesizer using Bosendorfer piano samples to generate a waveform that can be listened to. 
+
+Feature engineering: Several of the columns have no effect on the music, and so will be dropped prior to analysis:
+Voice, R-env, 2nd-gl, 3rd-gl, mult, chan 
+I plan to load the csv file into a pandas data frame and drop those that don't change through the performance. I will use the pandas data analytic techniques to determine which columns to drop.
+
+Model selection: I plan to explore three different deep learning paths:
+1. Variational Autoencoder - compress the matrix of values and then expand them back and see what it sounds like 
+
+2. Generative Adversarial Network - The generator will try to compose music like Bach, and the discriminator will attempt to tell if it represents the work of Bach or an imposter. This has been attempted before, including this: https://towardsdatascience.com/bachgan-using-gans-to-generate-original-baroque-music-10c521d39e52
+
+3. Reinforcement Learning - I plan to write a Python game using the Gym model that can provide rewards to the actor who creates interesting combinations of notes in the style of the Aria. Closeness to parts of the piece without exact duplicates receives higher rewards. 
+
+Prior art: Also this paper by Gaëtan Hadjeres, François Pachet, Frank Nielsen DeepBach 
+Also this: [Liang, 2016] Feynman Liang. Bachbot: Automatic composition in the style of bach chorales
+
+4. LSTM - Use the Aria as the start of an extended piece, where the model attempts to continue the series. 
+https://www.kaggle.com/karnikakapoor/music-generation-lstm/notebook
+Clearly I need to think about this some more.
+------------------------------
+How to call Csound from my python code?
+https://csound.com/docs/ctcsound/ctcsound-API.html
+
+ctcsound is a Python module which wraps the C functions of the Csound API in a Python class called ctcsound.Csound. The methods of this class call the corresponding C function of the API.
+      pip install ctcsound
+      sudo dnf install csound-devel lazarus
+      install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+      sudo dnf install ffmpeg
+      sudo dnf install sox v4l-utilsdnf 
+
+https://listserv.heanet.ie/cgi-bin/wa?A2=ind2201&L=CSOUND&P=65373      
+On 10/01/2022 11:13, Oeyvind Brandtsegg wrote:
+Hi Susanne,
+
+Welcome to the community, and wonderful idea to combine Csound and Python! The two languages complement each other very nicely and you will be able to build some very nice things with them together. You can run
+Python as the main program and load Csound as a module (with ctcsound) and this works with Python 3. 
+No need to use Jupyter unless you find it helpful. This is the most standard way of combining Csound and
+Python, and will work well for most purposes.
+
+Another way is to run Csound as the main program and then access Python via the py opcodes (e.g. pycall, pyrun etc), and this is probably the reason why you thought that you needed Python 2 (as the py opcodes are compiled for a specific Python version and have not yet been updated for Python 3). There are some limitations with the py opcodes that
+makes it slightly cumbersome to work with, so I would not recommend that route unless you really need it.
+
+Yet another way that I have been using more and more is to run the two programs as separate processes and just use OSC to communicate between them. This can be useful for example if I wrap the Csound instruments as VSTs to run in a DAW, and I do not want the Python interpreter to potentially interfere with the audio thread of the whole DAW.
+
+Running Python as a server in the background allows Csound then to run very lightweight and only be taxed with producing audio in realtime, then Csound can poll the Python server for data values to use for note parameters and similar.
+
+As Francois mentioned, the ctcsound examples are a good place to start.
+
+I just wanted to mention these other possibilities to fill out the context.
+
+All best
+Øyvind Brandtsegg
+More advice from Michael Goggins: 
+You are supposed to use the ctcsound.py file that is installed by your Csound installer. If you have several installations or an old installation that was not deleted or only incompletely deleted, this could happen. See if you have more than one ctcsound.py file also, and get rid of all that did not come with your installed version of Csound.
+
+Rather than rename files, it is better to create a symbolic link that creates a name that will load that points to the installed file. This is actually usually done for you by installers.
+
+Best,
+Mike
+
+-----------------------------------------------------
+Michael Gogins
+Irreducible Productions
+http://michaelgogins.tumblr.com
+Michael dot Gogins at gmail dot com
+
+
+On Fri, Jan 14, 2022 at 6:59 PM Prent Rodgers <prent.rodgers@gmail.com> wrote:
+I'm also interested in using Python to call Csound, as part of a Reinforcement Learning and Q learning project that is written in Python. When I try to execute the first call in the Jupyter notebook "01-the-ctcsound-module.ipynb" I get this error:
+
+----> 1 libcsound = ct.CDLL("libcsound64.so")
+OSError: libcsound64.so: cannot open shared object file: No such file or directory
+
+My libcsound64.so.6.0 is in here:
+
+ls /usr/lib64/libcs*.*
+/usr/lib64/libcsound64.so.6.0
+
+The libsound request works if I change the name of the module to include the 6.0 in the name.
+
+libcsound = ct.CDLL("libcsound64.so.6.0")
+returns True
+
+Is there something I'm doing wrong? 
+      sudo dnf install csound-devel 
+This would have fixed it in a minute      
+-------------------------------
+Try the csound container with podman:
+      podman run -it -v /home/prent/Dropbox:/Dropbox:z -v /home/prent/Music/sflib:/home/prent/Music/sflib:z --name csound --user 0:0 --rm csound bash
+      pip install jupyterlab      
+      pip install ctcsound 
+      hostname -I 
+10.0.2.100      
+      jupyter lab --allow-root
+      Asks you to join here: http://localhost:8888/lab?token=9c246c4d71b4389fcb5867d4fc6a2820082d35b7e22810f7
+But that doesn't work.      
+I think i need to point to the 10.0 adddress:
+      http://10.0.2.100:8888/lab?token=9c246c4d71b4389fcb5867d4fc6a2820082d35b7e22810f7
+That doesn't work either.      
+I think I need to start the container with the --host argument. Or better, open the ports
+      podman run -it -v /home/prent/Dropbox:/Dropbox:z -v /home/prent/Music/sflib:/home/prent/Music/sflib:z --name csound --user 0:0 -p 8888:8888 --rm csound bash
+No improvement      
+      podman run -it -v /home/prent/Dropbox:/Dropbox:z -v /home/prent/Music/sflib:/home/prent/Music/sflib:z --name csound --user 0:0 --network=host --rm csound bash
+This should do it.
+      podman commit csound csound 
+      podman images
+REPOSITORY                                 TAG         IMAGE ID      CREATED         SIZE
+localhost/csound                           latest      7e20b3c865b4  36 seconds ago  3.56 GB #<-- this is csound
+localhost/buntu                            latest      b48f3bfc14d5  12 days ago     1.07 GB
+registry.fedoraproject.org/fedora-toolbox  35          40b181c70b73  3 weeks ago     573 MB
+localhost/opencv                           latest      cbf8053fc38d  6 weeks ago     1.58 GB
+docker.io/library/ubuntu                   latest      ba6acccedd29  3 months ago    75.2 MB
+registry.fedoraproject.org/fedora-toolbox  34          daf770cfb9ee  5 months ago    518 MB
+
+---------------------------------------------
+10:48 on 1-15-21 It's working inside the container csound now. Jupyter and csound together at last!
+But I'm not sure this is what I want. It's very complicated to pass notes to csound this way.
+Here are some examples, see #5 for a way to pass notes to a running csound
+https://github.com/csound/csoundAPI_examples/blob/master/python/py3
+I don't have python there. Oops. Need miniconda and a podman commit.
+Installed miniconda and mamba:
+      sh /root/Downloads/Miniconda3-latest-Linux-x86_64.sh
+      source ~/miniconda3/etc/profile.d/conda.sh
+      conda create --name ctcsound
+      conda activate ctcsound
+      conda install mamba -n base -c conda-forge
+Then commit:
+      podman commit csound csound -p
+-----------------------------------------------------
+It still doesn't have python!
+      mamba install python 
+      pip install ctcsound # <-- why do I need to do this again? No idea.
+Then commit. Again.      
+      podman commit csound csound -p      
+---------------------------------------
+I'm getting lots of segment faults calling csound from python.
+      Csound tidy up: Segmentation fault
+-------------------------
+I think for this I'll need a simpler way to play tunes. Having to run csound inside a container means I no longer have access to direct audio input, which is a problem.
+---------------------------------
+I need to figure out how to get python to play pitches. I can call csound on a file in the container. But I can't get any program to play sound from inside the container. This appears to be a show stopper.
+---------------------------------------
+To start the csound container from the terminal inside vscode:
+      flatpak-spawn --host podman run -it -v /home/prent/Dropbox:/Dropbox:z -v /home/prent/Music/sflib:/home/prent/Music/sflib:z --name csound --user 0:0 --rm csound bash
+to access the sound from inside the container:
+      --device /dev/snd      
+      ls: cannot access '/dev/snd/pcmC1D0p': Permission denied
+---------------------------
+But I can get csound to work in the toolbox, where I can get access to the sound service?
+      pip install ctcsound 
+----------------------------
+
+----------------------------------
+I refreshed the Fedora 35 Silverblue on the HP800, reinstalled miniconda, jupyter, ctcsound, ffmpeg, dropbox, chrome, gnome-tweaks, vscode, ssh, and a bunch of other software. But I still get the same -----------------------------------------------------
+1/18/21 I now have a working gym environment on both the T480 and the HP800 using ctcsound, jupyter, python, other tools.
+It seems to only work from the host command line, not a toolbox on the T480. But I'm not sure about the HP800 Silverblue.
+The most interesting examples are based on Steven Yi's Python "How to use the Csound API" files on https://github.com/csound/csoundAPI_examples
+Found in my Csound directory here: 08-ctcsoundAPIExamples.ipynb.
+This notebook contains examples of calling csound note by note in real time. And it works. Amazing.
+---------------------------------------------------------------
+However. I should not have installed csound, rather csound-devel 
+      sudo dnf install csound-devel 
+---------------------------------------
+Next steps:
+      Create a python program that instantiates an orchestra, and has a loop that sends notes to it.
+      Then create a notebook to greatly simplify the timing and notes. Drop the microtonality and the slides, mordants, etc. Take machine4.mac and copy it as goldberg5.mac
+      I thought about using the Well Tempered Clavier as an example. See: Scores/Bach Well Tempered Clavier IMSLP173661-PMLP05948-1 full.pdf
+      Edited out the pages not needed for the Aria of Goldberg Variations using PDF Mix Tool, a good tool for rearranging pages.
+      Remove the references to the microtonal tuning info using Master PDF Editor - could not get it to work.
+      Scribus was able to remove these. Scores/Goldberg_Variations Aria.pdf
+      Reducing this to 12 tones is going to be complex. There is a ton of misdirection that I created to enable variations.
+      This is how I state a phrase:
+            .phrase-1 &phrase-1a. &phrase-1b.
+            .phrase-1a &p-meas-m01.&all-inst-m*. &p-meas-m02.&all-inst-m*. &p-meas-m03.&all-inst-m*. &p-meas-m04.&all-inst-m*. &p-meas-m05.&all-inst-m*.
+            .p-meas-m01 &s-mea-m01.&s-Gnoton.&key.
+      And this is what s-mea-m01 looks like:
+            .s-mea-m01 .mea m01x
+      So that creates a variable call &mea. that consists of the string m01 
+            .s-Gnoton .key &Gnoton.x 
+      &s-Gnoton. sets key to &Gnoton So if I can ensure that only Gnoton is called regardless of the measure, I then only have to change one set of notes.
+      Make that the only key. 
+            .p-meas-m01 &s-mea-m01.&s-Gnoton.&key.
+            @                            +-- this calls .p-no-m01-1 which has the notes &n-m01-1.&n-m01-2. and so on.  
+            @                            |             +-- this calls .p-dh-m01-1 which has the durations &d-m01-1.&d-m01-2. and so on
+            .most-inst-m01-1 &fin2.&init.&p-no-&mea.-*.&p-dh-&rhy.-*.&play-m01-all-*. &fin3.&init.&p-dh-&rhy.-*.&play-m01-all-*. &fin4.&init.&p-dh-&rhy.-*.&play-m01-all-*. &fin5.&init.&p-dh-&rhy.-*.&play-m01-all-*.
+            .most-inst-m01-2 &fin6.&init.&humm-m01-all-*. &fin7.&init.&humm-m01-all-*. &fin8.&init.&bass-m01-all-*. &rest-1.
+            .all-inst-m01-1 &most-inst-m01-1. &most-inst-m01-2.
+      And those call these measures:
+            .p-no-m01-1 &n-m01-1.&n-m01-2.&n-m01-3.&n-m01-4.&n-m01-5.&n-m01-6.&n-m01-7.&n-m01-8.&n-m01-9.&n-m01-A.&n-m01-B.&n-m01-C.&n-m01-D.&n-m01-E.&n-m01-F.&n-m01-G.&n-m01-H.&n-m01-I.&n-m01-J.&n-m01-K.&n-m01-L.
+            .p-dh-m01-1 &d-m01-1.&d-m01-2.&d-m01-3.&d-m01-4.&d-m01-5.&d-m01-6.&d-m01-7.&d-m01-8.&d-m01-9.&d-m01-A.&d-m01-B.&d-m01-C.&d-m01-D.&d-m01-E.&d-m01-F.&d-m01-G.&d-m01-H.&d-m01-I.&d-m01-J.&d-m01-K.&d-m01-L.
+      The notes themselves are specified here:
+            .n-m01-1 .no-1 o5g0&Gn.x
+            .n-m01-2 .no-2 o3g0&Gn.x
+            .n-m01-3 .no-3 o5g0&Gn.x
+            .n-m01-4 .no-4 o3g0&Bn.x
+            .n-m01-5 .no-5 o4g0&Dn.x            
+      So the note names are defined in the .Gn macro:
+            .Gno-1 .o-1 t90k4x
+            .Gno-2 .o-2 t109k4x
+            .Gno-3 .o-3 t127k4x
+            .Gno-4 .o-4 t143k4x
+            .Gnoton &Gno-1.&Gno-2.&Gno-3.
+      So if I can identify all the scale macros, and redefine the note numbers from the 214 unequal numbers to the 12 tempered numbers, I can simplify the notes. Done. But I don't care for the tuning. I think it's in D major, and this piece is in G. Fortunately, I had saved Microtonal.xlsx from 2018 and found the version of the tuning favoring the key of G. 
+      I can't find where Carl Lumma posted it. VRWT
+      What does it stand for? These are the cents:
+      0  93.6  192.6  294.1  393.1  498.0  591.6  696.6  795.6  891.1  996.1  1,095.0  1,200.0 
+      Sounds pretty good.
+      Set the volume up a bit. Multiplier.
+            .ld-mf &set-loud-mf.&w-lou-mf.i9
+            .ld-mp &set-loud-mp.&w-lou-mp.i9
+            .ld-p &set-loud-p.&w-lou-p.i10
+      Line 6946-7:
+      @ how what range of volume samples do you want?
+      &ld-p.&theme-part-1. &ld-mp.&theme-part-2.     
+      @ p15 dictates the overall volume       
+---------------------------
+Load into a pandas dataframe and remove the columns/rows not needed.
+      See the notebook Goldberg_aria1.ipynb
+--------------
+1/20/22 Now what I need is to build an orchestra that will send each note of the Aria to the sound generator one at a time. Later, I can randomize some of that. Just to get used to sending notes to an orchestra.       
+I'd like to get rid of the samples that aren't used. These are the only ones used as of 1/21/22:
+      grep "iFtable =" goldberg_aria1.log  |sort | uniq
+instr 1:  iFtable = 647.000
+instr 1:  iFtable = 649.000
+instr 1:  iFtable = 652.000
+instr 1:  iFtable = 685.000
+instr 1:  iFtable = 917.000      
+---------
+1/21/22 I'm wondering if it would be worthwhile to install csound-dev in a toolbox. Done. It works.
+But I'm noticing some octave shifts that don't belong there.
+I fixed the .Gnoton so that the octave shifts were taken out. Those were only needed with that key was a shifted verion of the F scale that is part of the 31-limit tonality diamond. All is good now.
+---------------------------
+I wish there was some way I could save the output messages to a log file like in the -o filename.log. 
+------------------------------
+What does csoundMagics have to offer?
+
+How to send individual notes to an orchestra: https://github.com/csound/ctcsound/blob/master/cookbook/drafts/heintz_lac2020.ipynb
+      It has sendScore method: Send score events to the engine.
+      |      
+      |      If the startClient method had been called previously, the events
+      |      will be sent to a server as UDP packets instead.
+-------------------------      
+Ctcsound API - class ctcsound.CsoundPerformanceThread(csp)
+      csp is the the Csound instance. 
+            csp = ctcsound.Csound()  
+            csp.compileOrc(orc) # must be complete before calling the following:
+      CsoundPerformanceThread: https://csound.com/docs/ctcsound/ctcsound-PT.html
+            +-- method scoreEvent
+            |          +-- absp2mode if non-zero start time from performance start.
+            |          |          +-- opcode is i for note event
+            |          |          |      +-- pfields are the tuple, list, or ndarray of MYFLTs with event p values
+            scoreEvent(absp2mode, opcod, pFields)
+      Sends a score event.
+
+      The event has type opcod (e.g. ‘i’ for a note event). pFields is tuple, a list, or an ndarray of MYFLTs with all the pfields for this event, starting with the p1 value specified in pFields[0]. If absp2mode is non-zero, the start time of the event is measured from the beginning of performance, instead of the default of relative to the current time.
+For an example of this see Example 4 in 08-ctcsoundAPIExamples.ipynb 
+It's not a very good example of sending note events to CsoundPerformanceThread though. Here is more in the Csound mailing list:
+You should have a look at scoreEvent, scoreEventAbsolute (https://csound.com/docs/ctcsound/ctcsound-API.html#ctcsound.Csound.scoreEvent) which are methods of the Csound class, or at the scoreEvent method of the CsoundPerformanceThread class (https://csound.com/docs/ctcsound/ctcsound-PT.html#ctcsound.CsoundPerformanceThread.scoreEvent).
+
+Definitively you should rely on the Csound performance clock.
+
+François - the ctcsound developer
+Jason Hallen <hallenj@gmail.com> is trying to learn to use it.
+a *mental model* of how elements like the Csound class,
+
+Francois published this a few years ago: https://csoundjournal.com/issue14/realtimeCsoundPython.html
+--------------------------------------
+Now I'm getting really frustrated with this. But I found a working sample very close to what I'm trying to do. 
+This github https://github.com/csound/ctcsound/blob/master/cookbook/03-threading.ipynb
+He uses a csd file, but I don't see why my combo of orc and sco would not work.
+I am able to get his working in a notebook, but when I copy it into a python .py file, it doesn't produce anything.
+In the notebook I hear sound and this is the message output:
+end of score.		   overall amps:  0.31298  0.31298
+	   overall samples out of range:        0        0
+0 errors in performance
+653 512 sample blks of 64-bit floats written to dac
++-- 653 sample blocks written to dac
+
+The python command line version:
+end of score.		   overall amps:  0.00000  0.00000
+	   overall samples out of range:        0        0
+0 errors in performance
+0 512 sample blks of 64-bit floats written to dac
++-- zero sample blocks written to dac
+
+What gives? This is the same gym toolbox environment in the notebook and the command line.  I slipped some time between them and now it works. But how much is needed? 2,1,2 in this case. Larger orchestras may need more time.
+---------------------------------------------
+      cs.compileCsdText(csd)
+      cs.start()
+      time.sleep(2)
+      pt = ctcsound.CsoundPerformanceThread(cs.csound())
+      pt.play()
+      time.sleep(1)
+      pt.scoreEvent(False, 'i', (1, 0, 1, 0.5, 8.06, 0.05, 0.3, 0.5))
+      pt.scoreEvent(False, 'i', (1, 0.5, 1, 0.5, 9.06, 0.05, 0.3, 0.5))
+      time.sleep(2)
+      pt.stop()
+      pt.join()
+      cs.reset()
+------------------------------
+Find all the samples needed in a particular run:
+      grep "iFtable =" goldberg_aria1.log | sort | uniq
+make sure you sort before you uniq 
+----------------------------------
+Finally got it to play the piano. It's very sensitive to the <CsScore> and other <> positions. I had them wrong.
+At this point it's working, at least it played one note. I asked for four, but only one came out. Terribly loud. Major problem with volume. Almost blew out my ears. This was caused by 
+0dbfs  = 1
+instr 1:  iFtable = 806.000
+instr 1:  iFtable = 799.000
+inactive allocs returned to freespace
+end of score.              overall amps:7883.3871112390.15867
+           overall samples out of range:   289970   326423
+Two went through the orchestra, only heard one. Now only one went through the orchestra, heard only one. Fixed that. The note starts were too late on all but the first. 
+----------------------
+1/22/22 Finally got the two python programs to play notes using scoreEvent(). It works to play notes. The timing is in seconds. I have not figured out how to use the t 0 function and get it accepted by the ctcsound instance. I suppose it doesn't matter because I can just do my own timing in python. But I'm concered about the accuracy of the timing. I can be extremely precise in csound, but python, as an interpretted language, may not be able to do that. 
+---------------------
+Other ideas. ctcsound notebook provides csoundmagics that can display tables graphicaly. That's something I've wanted for a long time. Especially for combinine pitch change tables. I will have to explore that. 
+See here: https://github.com/csound/ctcsound/blob/master/cookbook/10-table-display.ipynb
+------------------------------------
+What I need now is a way to take a pandas dataframe of notes, and convert them to scoreEvent() calls. I noticed that when I do this:
+      df = df[df.chan != 1] # remove any of the channel 1 rows
+The row numbers, the index for each note, stays the same as before the df = df command runs. How can I reset the index numbers?    
+      df.reset_index(level=0, inplace=True)
+Still need to figure out how to meet the requirements for scoreEvent.      
+The manual says: pFields is tuple, a list, or an ndarray of MYFLTs with all the pfields for this event, starting with the p1 value specified in pFields[0]. 
+      rownum = 6 # the index to the row
+      pfields = df.iloc[rownum].values.tolist()
+Some things I need to do to the dataframe:
+      1. add the instrument number (1) to the first position in the list
+      2. reduce the duration. Divide 'Dur' by 32
+      3. set the start time to 0 
+----------------------------------
+1/24/22 I was able to get the notebook running with all the samples. I experienced csound segmentation faults for a while, but when I removed this line:
+      # ctcsound.setDefaultMessageCallback(noMessage) # supress all messages. Pretty extreme I'd say.
+Of course, I would really like to send the messages from csound to a file, rather than the console. That option has to be set before csound is called, like in the command line, which there is none.       
+The crashes stopped. For a while. I noticed that memory use is very high. After loading all the samples, my memory is at 90% 13.2 GB of 16.5 GB and swap is at 2.9 GB of 25 GB. It started working when I changed the message suppression to add the following after cs=ctcsound.Csound()
+      cs = ctcsound.Csound()    # create an instance of Csound
+      # added 1/24/22 to supress messages
+      def flushMessages(cs, delay=0):
+            s = ""
+            if delay > 0:
+                  time.sleep(delay)
+            for i in range(cs.messageCnt()):
+                  s += cs.firstMessage()
+                  cs.popFirstMessage()
+            return s
+      def printMessages(cs, delay=0):
+            s = flushMessages(cs, delay)
+            if len(s)>0:print(s)            
+
+      cs.createMessageBuffer(0)    
+      # end addition 1/24/22
+So can I selectively print messages with this?      
+---------------------------
+Ok. The problem I was having with it not playing any notes is that when pt.scoreEvent(True,'i', pfields) was set to True, it was calculating the time from with it first played a note, and since the start times were all zero, which is long past, it didn't play anything. I need to set it to False, instead of the current time. I want the current time. So I need to set it to False. I have no way of knowing when the "performance start" is. 
+Amazing. That took me two days to figure out. At this rate...
+-----------------------------------------------------
+Remember your goal: Solve the problem. Make it meet the requirements of the assignment. 
+      Go back to the Q learning and reinforcement learning tutorial.
+Before I do, I'm thinking I might want to spend a day reading prior work.
+      Listener-Adaptive Music Generation 55796161.pdf Alic & Wolff 2020
+            Two phases:
+            First, we train a recurrent neural network on an existing
+            dataset of songs. Second, we iteratively present a listener
+            with generated sequences, and use the feedback to improve
+            the model.
+            code here: https://github.com/cwolffff/musicgen Does not work. Missing files.
+            Samples here: https://soundcloud.com/sterling-alic/sets/listener-adaptive-feedback1
+      Generating Music by Fine-Tuning Recurrent Neural 45871.pdf Jaques Turner Gu Eck 
+            Reinforcement learning can be used to impose arbitrary properties on generated data by choosing appropriate reward functions. 
+      Limitations of Deep Learning Music 1712.04371.pdf Briot Pachet 2016
+------------------------------------
+MIT Lecture on Reinforcement learning. Notes are here: /home/prent/Dropbox/Tutorials/Deep Reinforcement Learning/Deep Reinforcement Learning.txt line 141 from Youtube here: https://www.youtube.com/watch?v=93M1l_nrhpQ&t=889s
+
+Andrej Karpathy's deep learning course which has videos online, from 2016 Berkeley who has a deep reinforcement learning course which has all of the lectures online. None on Reinforcement Learning, and he's out of academia now. (Tesla)
+
+Building custom Gym environments: https://stable-baselines.readthedocs.io/en/master/guide/custom_env.html
+Stable Baselines (3): https://github.com/DLR-RM/stable-baselines3
+      Stable Baselines3 (SB3) is a set of reliable implementations of reinforcement learning algorithms in PyTorch.
+--------------------------------------------------
+Went back to look at this course: /home/prent/Dropbox/Tutorials/Machine Learning and Deep Learning Bootcamp in Python/Machine Learning and Deep Learning Boot Camp.txt
+https://ibm-learning.udemy.com/course/introduction-to-machine-learning-in-python/learn/lecture/9314386#overview
+Instructor: Holczer Balazs Software Engineer
+He has a lot of code, including tic-tac-toe. machine_learning/DeepQLearningTicTacToe.py
+      import random
+      from tensorflow.keras.models import Sequential
+      from tensorflow.keras.layers import Dense
+      import numpy as np
+      mamba install tensorflow-cpu==2.6.2
+-------------------------------
+Decided I create another toolbox for tensorflow, then a conda environment called tensorflow, then install tensorflow in that.
+      flatpak-spawn --host toolbox create tensorflow # I probably didn't need to do that step, but there we are.
+      conda create --name tensorflow
+      conda activate tensorflow
+      mamba install tensorflow-cpu
+      python
+Python 3.9.9 | packaged by conda-forge | (main, Dec 20 2021, 02:41:03) 
+[GCC 9.4.0] on linux
+>>> import tensorflow
+>>> tensorflow.__version__
+'2.6.2'
+So there it is. 
+      python machine_learning/DeepQLearningTicTacToe.py
+It's running. The player is getting very good after 250 games. Perhaps this can be the basis for the music one. After running for 20,000 moves, maybe 4 hours of compute, it gave me one try then stopped. But this may be a reasonable model for my music effort. 
+-------------------------------
+Looking at /home/prent/Dropbox/Tutorials/OReilly_Reinforcement_Learning/OReilly_Reinforcement_Learning.txt
+Uses openAI gym and MuJuCo, which I was never able to install at the time. There is a nice description of how to determine if you have a reinforcement learning problem:
+      It requires that the environment has a termination point, with positive or negative outcomes
+      Must include some kind of reward that can factor into a cost equation
+      The state must be able to be represented mathematically
+      The larger the state space, the more complex and time-consuming the problem will be. 
+            for example, qlearning5.py would have taken a week to learn.  
+      I had real trouble with getting the visual stuff working in the conda gym environment. It was missing lots of graphic things so failed on render()
+------------------------
+Reviewing these notes: /home/prent/Dropbox/Tutorials/Classical-Piano-Composer/Note on using Machine Learning for Music.txt
+Discussion of this paper: Symbolic Music Generation with Transformer-GANs.pdf
+      They use the Maestro Midi V1 dataset from Hawthorne et al. 2019 200 hours of paired audio and midi recordings of the Piano-e-Competition. Augmented with transposition of keys and stretched time.
+      Code here: https://github.com/amazon-research/transformer-gan
+      examples here: https://tinyurl.com/y6awtlv7
+      Downloaded to dropbox. Should show up soon. Some remarkable immitations of romantic era piano music. Amazing. But not for me.
+--------------------------------------------------
+This one has the code for tensorflow v1. Tuning Recurrent Neural Networks with Reinforcement Learning.pdf
+Instructions here: https://github.com/natashamjaques/magenta/tree/rl-tuner but they didn't work
+
+      toolbox create magenta
+      toolbox enter magenta
+# or this      
+      flatpak-spawn --host toolbox enter magenta
+      
+I switched to 
+
+      cd ~
+      git clone https://github.com/magenta/magenta.git
+      cd ~/magenta
+      
+Follow the directions in the readme.md 
+      curl https://raw.githubusercontent.com/tensorflow/magenta/main/magenta/tools/magenta-install.sh > /tmp/magenta-install.sh
+      bash /tmp/magenta-install.sh
+That creates the magenta anaconda env.
+      sudo dnf group install "C Development Tools and Libraries"
+      sudo dnf install SAASound-devel jack-audio-connection-kit-devel portaudio-devel
+      mamba install jupyterlab 
+      pip install -e .
+      git clone https://github.com/magenta/magenta-demos.git
+There are some modules that won't work with tensorflow 2.6.
+      tf_upgrade_v2 --infile magenta-demos/jupyter-notebooks/RL_Tuner.ipynb --outfile magenta-demos/jupyter-notebooks/RL_Tuner2.ipynb      
+It can't deal with tf.contrib.training.HParams
+20:19: ERROR: Using member tf.contrib.training.HParams in deprecated module tf.contrib. tf.contrib.training.HParams cannot be converted automatically. tf.contrib will not be distributed with TensorFlow 2.0, please consider an alternative in non-contrib TensorFlow, a community-maintained repository such as tensorflow/addons, or fork the required code.
+
+I found a solution here: https://alexandredubreuil.com/publications/2020-06-06-music-generation-with-magenta-2-0-1-a-migration-guide-from-version-1-1-7/
+
+Unfortunately in Tensorflow 2, the contrib module is gone, so we have to add a dependency to the contribution module we want. This is already done for the HParams class since it is used in Magenta. We import the contrib_training module (which in turn imports from tensor2tensor.utils.hparam import HParams) to have access to the class:
+Add this to the RL_Tuner.ipynb:
+      from magenta.contrib import training as contrib_training
+And change tf.contrib.training.HParams to contrib_training.HParams
+
+Stuck on a failed reload, then a cascade of errors from there. 
+-----------------------------------------------
+I was able to get it running in the google colab environment. https://colab.research.google.com/notebooks/magenta/performance_rnn/performance_rnn.ipynb#scrollTo=nzGyqJja7I0O
+
+Could not get that one running on my T480. 
+
+Hello Magenta: https://colab.research.google.com/notebooks/magenta/hello_magenta/hello_magenta.ipynb
+It has a set of tutorial notebooks on Google Colab, including Melody RNN an LSTM-based language model for musical notes -- it is best at continuing a NoteSequence that you give it.
+
+To use it, you need to give it a sequence to continue and the model will return the following sequence.
+Maybe I could use this to extend phrases in the Aria. 
+----------------------------------
+1/28/22 I should convert the ctcsound section, without the loading of the dataframe, to a module that can be imported.
+Created piano.py - for now it is a complete module with a main, but once I get it working it will just be the things that I can call. Got that working. Amazing enough.
+--------------------------------------
+1/29/22 I enabled logging with the logger package for the python module and for the notebook. The python program logs messages to the python program name with .log appended to it. The notebook puts them off in the wilderness of condaland.
+This command figures out which samples are actually used. 
+      grep -i 'iFtable' test_piano.py.log  | sort | uniq
+2022-01-29 10:05:46,728 - root - INFO - instr 1:  iFtable = 622.000
+instr 1:  iFtable = 610.000
+instr 1:  iFtable = 611.000
+instr 1:  iFtable = 612.000
+instr 1:  iFtable = 613.000
+instr 1:  iFtable = 614.000
+instr 1:  iFtable = 615.000
+instr 1:  iFtable = 616.000
+instr 1:  iFtable = 617.000
+instr 1:  iFtable = 618.000
+instr 1:  iFtable = 619.000
+instr 1:  iFtable = 620.000
+instr 1:  iFtable = 621.000
+instr 1:  iFtable = 622.000
+instr 1:  iFtable = 623.000
+I also added goldberg6.mac which includes the entire sample set. It stutters a bit while playing. By virtue of the mp loudness setting, it uses the same samples as the goldberg5.mac
+      grep -i 'iFtable' test_piano.py.log  | sort | uniq
+instr 1:  iFtable = 610.000
+instr 1:  iFtable = 611.000
+instr 1:  iFtable = 612.000
+instr 1:  iFtable = 613.000
+instr 1:  iFtable = 614.000
+instr 1:  iFtable = 615.000
+instr 1:  iFtable = 616.000
+instr 1:  iFtable = 617.000
+instr 1:  iFtable = 618.000
+instr 1:  iFtable = 619.000
+instr 1:  iFtable = 620.000
+instr 1:  iFtable = 621.000
+instr 1:  iFtable = 622.000
+instr 1:  iFtable = 623.000
+-------------------------------------
+1/29/22 Next project. I have to make a choice then try to get it to work:
+      1. Make a game of it using the template of taxi.py from here: https://github.com/openai/gym/blob/master/gym/envs/toy_text/taxi.py
+      2. Try the qlearning4.py version from https://yourlearning.ibm.com/activity/URL-EC6262BF6F3A
+      and here: https://pythonprogramming.net/own-environment-q-learning-reinforcement-learning-python-tutorial  
+
+      In any case I need to decide what the reward will be.
+---------------------------------------------------------------------      
+Figure out how to install the environment. 
+      I think I need stable-baslines3. Info here: https://stable-baselines3.readthedocs.io/en/master/guide/install.html
+            cloned the gym environment to old_gym and will create a new one for stable baselines called gym
+                  toolbox create gym 
+                  toolbox enter gym 
+                  conda create --name gym
+                  conda activate gym
+                  mamba install stable-baselines3[extra]
+                  mamba install -c fastai opencv-python-headless
+                  python getting_started.py 
+Getting this old tried and true error again:
+      ImportError: Library "GL" not found.
+ImportError:      
+      Error occurred while running `from pyglet.gl import *`
+      HINT: make sure you have OpenGL installed. On Ubuntu, you can run 'apt-get install python-opengl'.
+      If you're running on a server, you may need a virtual frame buffer; something like this should work:
+      'xvfb-run -s "-screen 0 1400x900x24" python <your_script.py>'
+This looks familiar. I thought I was over that problem when I ran in the host terminal. 
+---------------------------------------------------
+getting_started.py was made from this: https://stable-baselines3.readthedocs.io/en/master/guide/quickstart.html
+I opened a new terminal window and it ran fine. I guess that's where I'll run for now.               
+Trying the docker image:
+      docker pull stablebaselines/stable-baselines3-cpu
+      docker run -it --rm --network host --ipc=host --name test --mount src="$(pwd)",target=/root/code/stable-baselines3,type=bind stablebaselines/stable-baselines3-cpu bash -c 'cd /root/code/stable-baselines3/ && pytest tests/'
+This assumes that you start in the /home/prent/stable-baselines3 folder. Not all the tests ran successfuly
+see Stable-Baselines3.tests.txt. Mostly warning that ROM wasn't available. So that's a fallback position.
+I also installed Jupyter lab (pip install jupyterlab) and Xvfb (with apt-get install -y xvfb) and piglet (pip install pyglet) There appears to be a conda instance in the container as well. 
+      podman commit test stable-baselines3 -p 
+Now if you want to run it:
+      podman run -it --rm --network host --ipc=host --name test --mount src="$(pwd)",target=/root/code/stable-baselines3,type=bind stable-baselines bash
+
+----------------------------------------
+I need a leg up on how to create an environment. I just don't have a good understanding of the classes involved.
+Start here: https://blog.paperspace.com/getting-started-with-openai-gym/ then the 
+Later, do the custom environments here: https://blog.paperspace.com/creating-custom-environments-openai-gym/
+The first tutorial failed at env/.render(mode="human")
+But when I started up at the host terminmal jupyter lab, that worked and showed the video render.
+But I had missing atari_py
+so I:
+      pip install atari_py
+Now I get a different error:       
+Exception: ROM is missing for breakout, see https://github.com/openai/atari-py#roms for instructions
+At that github site it suggests:
+      In order to import ROMS, you need to download Roms.rar from the Atari 2600 VCS ROM Collection and extract the .rar file. here: http://www.atarimania.com/rom_collection_archive_atari_2600_roms.html
+Extract the rar file. in the host terminal:
+      sudo dnf install unrar 
+Then open the Downloads folder with Gnome file manager, and doubleclick on the downloaded file Roms.rar 
+Extract the files to a folder ~/Downloads/ROMS
+from the toolbox gym terminal in Vscode:
+Once you've done that, run:
+      python -m atari_py.import_roms ~/Downloads/ROMS
+
+      This should print out the names of ROMs as it imports them. The ROMs will be copied to your atari_py installation directory.
+It works. Shows the break outgame being played by a drunk.      
+----------------------------------------      
+I had trouble with the notebook "more_complex.ipynb" with opencv. I had to remove it then add it back in:
+ 
+      cv2.imshow('window', image)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+cv2.error: OpenCV(4.5.4) /tmp/pip-req-build-9vck9bv0/opencv/modules/highgui/src/window.cpp:1274: error: (-2:Unspecified error) The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Cocoa support. If you are on Ubuntu or Debian, install libgtk2.0-dev and pkg-config, then re-run cmake or configure script in function 'cvShowImage'   
+
+This error happens in the notebook, in a VsCode toolbox window and the host terminal toolbox. Never seen it before. It works if I don't enter a toolbox. Go figure. 
+Now I get very strange results: 
+      import cv2 
+      cv2.imread() # fails
+      
+ImportError: libGL.so.1: cannot open shared object file: No such file or directory
+
+This is insane. Just use it on the host and not the toolbox. 
+----------------------------------------------------------
+Here is how to create the github environment for your own Gym environment: https://github.com/StanfordVL/Gym/blob/master/docs/creating-environments.md
+
+Here is a tutorial that builds on that: https://towardsdatascience.com/beginners-guide-to-custom-environments-in-openai-s-gym-989371673952
+
+This google colab works in place: https://colab.research.google.com/github/araffin/rl-tutorial-jnrr19/blob/sb3/5_custom_gym_env.ipynb
+
+I'm struggling with finding the documentation on how to build a custom environment. This page: Using Customer Environments here: https://stable-baselines3.readthedocs.io/en/master/guide/custom_env.html
+
+Says: You can also find a complete guide online on creating a custom Gym environment. But the link is dead here: https://github.com/openai/gym/blob/master/docs/creating_environments.md
+
+This is how to create a stock market example gym environment: https://towardsdatascience.com/creating-a-custom-openai-gym-environment-for-stock-trading-be532be3910e
+and rendering: https://towardsdatascience.com/visualizing-stock-trading-agents-using-matplotlib-and-gym-584c992bc6d4
+Here is a github page that someone made while doing these examples: https://github.com/ryancleeton3/CustomGymEnvironments
+He seems to have done a decent job on it. 
+
+This is another github tutorial, but it's only how to set up and register the git page properly. https://github.com/MiguelDelPinto/gym-env-tutorial
+
+-----------------------------
+In the tutorial here: https://towardsdatascience.com/beginners-guide-to-custom-environments-in-openai-s-gym-989371673952
+Beginner’s Guide to Custom Environments in OpenAI’s Gym
+How to set up, verify, and use a custom environment in reinforcement learning training with Python
+His github page: https://github.com/MatePocs/gym-basic
+
+He refers to an intro to Q learning in python here: https://deeplizard.com/learn/video/HGeI30uATws
+and another blog post coding up a solution to the Frozen Lake environment. https://deeplizard.com/learn/video/qhRNvCVVJaA
+
+I like the goals:
+What This Guide Covers
+After working through the guide, you’ll be able to:
+1. Set up a custom environment that is consistent with Gym.
+2. Develop and register different versions of your environment.
+3. Decide what exactly needs to go in the environment class — in my opinion, this is the trickiest part of the whole project!
+4, Train a simple Q-learning algorithm on your new environment.
+5. Utilise Stable Baselines in the environment, use the package to verify that your custom environment is Gym-consistent, and train a more sophisticated algorithm.
+
+Some points:
+      Gym's special class *space* has two types: Box (n-dimensional) and Discrete (one dimensional)
+      state: the current state. It can be an integer with Discrete, or a numpy array for Box 
+      step: an action within the self.action_space. Action can be an integer or a numpy array.
+      enviroment: returns the new state based on the action taken. 
+      returns a 4-tuple:
+            state: type is self.observation_space 
+            reward: consequences of the action 
+            done: boolean True if reach an endpoint, and should be reset, or False
+            info: dictionary that can be used in bug fixing. 
+------------------------
+Time out for a revelation:
+      info must be the python dictionary that the 
+            check_env(env) complained about with AssertionError: The `info` returned by `step()` must be a python dictionary
+            I need to build this dictionary. But what are the terms needed here? 
+            assert isinstance(info, dict), "The `info` returned by `step()` must be a python dictionary"
+            So any terms at all are fine. It's for debugging purposes only. It's way to get something from the environment that might be helpful as you develop your code. Maybe just log it for now, and later come back and use it to communicate important things. I fixed it by adding the following before the return from the Class.
+                  info = {"fuel level": self.fuel_left}
+                  return self.canvas, reward, done, info
+end timeout.
+-----------------------------------------
+Having trouble with the notebook called: gym_basic_env_test.ipynb from the same page as above.
+
+      from stable_baselines3 import PPO2 # change it to PPO and it imports
+      from stable_baselines3.common.policies import MlpPolicy # there's a different way to import a policy with lines3.
+      from stable_baselines3.common.vec_env import DummyVecEnv
+
+The docs call for this: saved it in PPO_example.py  
+      import gym
+
+      from stable_baselines3 import PPO
+      from stable_baselines3.common.env_util import make_vec_env
+
+      # Parallel environments
+      env = make_vec_env("CartPole-v1", n_envs=4)
+
+      model = PPO("MlpPolicy", env, verbose=1)
+      model.learn(total_timesteps=25000)
+      model.save("ppo_cartpole")
+
+      del model # remove to demonstrate saving and loading
+
+      model = PPO.load("ppo_cartpole")
+
+      obs = env.reset()
+      while True:
+            action, _states = model.predict(obs)
+            obs, rewards, dones, info = env.step(action)
+            env.render()
+Neat. It has learned how to stay up. The vecenv window as four of them going at once. Very nice. Ran all night.
+---------------------------------------------------------
+So, back to my music example. I need a way to assess the reward for the note I'm sent. 
+      What if I stipulate that any note must be one of the ones in the notes dataframe? 
+            Pick a random number from 0 to 427 (or whatever the limit is) and return a pfields list from the df notes. Maybe pick several and mix up the octaves, volumes, start time for the next note, and durations. Keep the note and gliss only. No reward for that. 
+            Pick another number and compare it with all the previous notes. Assign a reward if this new note follows traditional music theory rules as outlined by /home/prent/Dropbox/Tutorials/Schoenberg Theory of Harmony/Schoenberg Theory of Harmony.txt
+      Another idea:
+            Run a VAE on the Aria, then compare the set of notes chosen by the actor to the Aria and if it's close, give it a reward. Closer without being exactly the same gets a higher reward. Perhaps in batches, one or four measures at a time.
+            That implies that I can build a VAE. For more info on VAE see /home/prent/Dropbox/Tutorials/Deep Learning and Reinforcement Learning/Deep_Learning_and_Reinforcement_Learning.txt
+            Run the video here: https://learn.ibm.com/mod/video/view.php?id=167966 I could not get the autoecoder to work very well, and the VAE at all. 
+            Also this: https://www.kaggle.com/basu369victor/generate-music-with-variational-autoencoder This works from low resolution audio wav files and produces low bitrate music that sounds like jazz from across a gymnasium.
+            VAE requires lots of samples to work properly. That means if I plan to use that solution, I'll have to find a ton of Bach keyboard music to feed into the VAE. 
+----------------------------------------------
+The pickle file loaded here: /home/prent/Dropbox/Tutorials/Deep Learning and Reinforcement Learning/JSB_Chorales-dataset.ipynb
+But I don't know what I have. How can I inspect a pickle file?
+------------------------------------------------
+How can I apply this technique to reinforcement learning? I don't see it. But it appears to make some good music. I understand the basic concept. Erase some notes. Train a model to replace them with the right subtitute note. Erase more notes, and watch how the model can iteratively substitute more notes. 
+-------------------------------
+So I have three choices for the algorithm to use for the assingment:
+
+1. Felix Sun. DeepHear 2017 or so. He used Joplin rags to train a Deep Belief Network from 5000 bits down to 16 neurons, then back to 5000 bits, in stages as described by the paper. I could train it on the Bach chorales. Once it is trained, feed random data into the 16 neuron network and listen to what it produces. How to aesthetically evaluate the results? Play a result and provide an evaluation. Maybe I can pass it through the rl_tuner_eval_metrics and give it a score?
+
+2. Huang, C. Z. A., Cooijmans, T., Roberts, A., Courville, A., & Eck, D. (2016). Counterpoint by Convolution. This one can find the missing notes in a work of Bach Chorales, which can be used to generate brand new music. I would be able to listen in real time using my piano.py module for csound. Provide a human evaluation. She has pointed to the bach chorales json file.
+
+3. Use the Stable Baslines to play a game that has some reward related to music. How to reward. See what they did in RL-Tuner.  Gave a reward if the piece met certain traditional theory measures. See the code here: https://github.com/magenta/magenta/blob/main/magenta/models/rl_tuner/rl_tuner_eval_metrics.py
+Keeps a dictionary for the whole piece on various good compositional practices and failures. It looks like it calculates how many of these in the whole piece, not as a reward amount for each action. That is not what I'd like. I want to return a reward for a good note immediately.
+      starts with the tonic
+      only one uniquely high note 
+      only one uniquely low note 
+      no large leaps that are not resolved by regressing to the norm
+      no notes not in the key 
+      no notes repeated more than three times in a row 
+      repeat the motif a few times 
+      no repeated pattern within a few notes of original (autocorrelation) 
+      no octave jumps 
+      no 7th jumps 
+      not too many rests 
+-------------------------------------------------
+I'm going to start with Felix Sun's approach, but with the bach chorales. I have a json file. How is that used? https://web.mit.edu/music21/doc/moduleReference/moduleCorpusChorales.html
+His code for DBN: https://github.com/fephsun/neuralnetmusic/blob/master/DeepLearningTutorials/code/DBN.py Needs Theano
+Here is the autoencoder notebook that worked, at least on the autoencoder portion of MNIST digits:
+05h_LAB_Autoencoders.ipynb
+------------------------
+Bach Chorales as a zip file: http://www-etud.iro.umontreal.ca/~boulanni/JSB%20Chorales.zip
+From here:
+https://github.com/msrparadesi/AWS-DeepComposer-Chartbuster-Challenge-April-2021-JSB-Chorales/blob/master/ar-cnn/AutoRegressiveCNN.ipynb
+Train, test, valid directories of the chorales. Neat.
+I'm able to get 1/3 of the way through this notebook, so I'll keep plugging away here and forget about the pickle file. The notebook loads the midi file names into a glob.glob. which has the three directories. 
+It then organizes them into 8 bar sets of 128 time steps: 4 timesteps per quarter note, 4 quarter notes per measure, 8 measures per sample set. It has a way to display the piano roll of each chorale. Very nice.
+They then augment the data by adding or removing notes. It removes random notes to create input piano rolls, and the model learns to add those notes back into the input piano rolls. The percentage of notes removed varies from 0% to 100%. The idea is to force the model to compose from scratch at some point. It adds new random notes all over the place in a uniform distribution so that it can learn to remove notes to recreate the input roll. The percentage added varies from 0% to 1.5% of the notes.
+The model is adapted from the U-net architecture, where it starts from a few neurons, then adds more as it moves towards the bottom, then removes them as it moves to the top ending. 
+      conv 4x4   4x4    4x4     4x4     4x4     4x4    4x4
+      64 --> 128 --> 256 --> 512 --> 512 --> 256 --> 128 --> 65
+All was well until I hit this line:       
+      # Start Training
+      history = model.fit_generator(training_data_generator,
+                              validation_data = validation_data_generator,
+                              steps_per_epoch = steps_per_epoch,
+                              epochs = epochs,
+                              callbacks = callbacks_list)
+
+Which is what the whole thing was leading up to, in my opinion. What a time to fail!.                    
+      TypeError: Value passed to parameter 'input' has DataType bool not in list of allowed values: float32, float64, int32, uint8, int16, int8, complex64, int64, qint8, quint8, qint32, bfloat16, uint16, complex128, float16, uint32, uint64     
+------------------------------------------          
+So what have I learned? 
+      1. I know how to find the Bach Chorales - see /home/prent/AWS-DeepComposer-Chartbuster-Challenge-April-2021-JSB-Chorales/ar-cnn/AutoRegressiveCNN.ipynb
+      2. I know how to divide them up into 128 time steps - same notebook 
+      3. Can I use them in Felix Sun's Autodecoder using my MNIST autoencoder notebook0? /home/prent/Dropbox/Tutorials/Deep Learning and Reinforcement Learning/05h_LAB_Autoencoders.ipynb
+I think I can do this. The failure was with the way the U-Net architecture was set up. I think I can start from the autoencoders notebook and build from there.
+
+So here are the two notebooks that I need to merge functionality:
+1. /home/prent/Dropbox/Tutorials/Deep Learning and Reinforcement Learning/05h_LAB_Autoencoders-Music.ipynb
+This is the MNIST autoencoder.
+2. /home/prent/Dropbox/Tutorials/Deep Learning and Reinforcement Learning/ar-cnn/F_Sun_Autoencoder.ipynb
+This is the notebook that has loaded the chorales into an array of piano rolls.
+The variable dataset_samples contains a set of 957 samples. Each sample consists of 128 timestamps, representing 8 measures at 1/16th note resolution as created by Bach. Each sample contains 128 time steps. Each time step contains 128 one-hot encoded array with up to 4 True, and 124 False values indicating by position which note will play. For example, if the 66th array position is True, it will want you to play MIDI note 66 at that time stamp.
+So I will need a way to turn a piano roll into notes that can be played, recognizing that you only want to play the first time the note appears, and not subsequent appearances that just represent a held note.
+
+Next issue: the MNIST input node called for 
+      ENCODING_DIM = 64
+      inputs = Input(shape(784,))
+What should I use. Look at the AutoRegressiveCNN.ipynb and see how it was implemented.
+He uses this: input_dim = (Constants.bars * Constants.beats_per_bar * Constants.beat_resolution, 
+                              8           *              4         *           4 = 128
+      Constants.number_of_pitches, Constants.number_of_channels)
+            128                           1
+The question is:
+      - use 128,128,1 as the shape of the input            
+      - flatten to 16,384 <-- this is what I chose. 
+      - Reduce the note array to eliminate the notes not used - but doesn't the autoencoder do this first thing automatically?
+How I got to shape chorales to 729 * 128*128
+      dataset_samples_flat = [None] * len(dataset_samples)
+      for i in range(len(dataset_samples)):
+            dataset_samples_flat[i] = dataset_samples[i].reshape(128*128,)
+      print(f'np.asarray(dataset_samples_flat).shape: {np.asarray(dataset_samples_flat).shape}')
+      
+np.asarray(dataset_samples_flat).shape: (979, 16384)
+
+Errored out with:
+      ValueError: Layer model_2 expects 1 input(s), but it received 979 input tensors.       
+Solution: I need a way to send them one at a time to the model.      
+How was that done in the original MNIST autoencoder notebook?
+I used the original network and it still says this:
+      ValueError: Layer model_3 expects 1 input(s), but it received 979 input tensors.
+So the problem is that the dataset_samples_flat is a list of 16384 booleans, and the model expects a numpy.ndarray. So, turn it into a np.ndarray
+      dataset_samples_flat_np = np.asarray(dataset_samples_flat)
+And send dataset_samples_flat_np into the model.       
+So that sent them into the network. I have yet to make the network look like the one that Felix Sun created. For now I'm just focussed on getting out of the network something that can look like the piano rolls that went into the model. 
+So, I think what I need to do is translate the np.ndarray into a list 979 by 128 by 128 matrix.
+      decoded_images = full_model.predict(dataset_samples_flat_np)
+      decoded_images.shape
+(979, 16384)      
+Unfortunately the decoded_images returns floats, not an array of boolean.
+What could be causing the problem:
+      1. It might be that the conversion from a python list to a ndarray transformed the booleans to float somehow. Look at the result of that conversion and see if it preserved the datatype 
+      2. I might have to put a softmax for four values at the end.
+      3. I might want to start the first hidden layer at some reasonable fraction of 16384. 64 is a bit too low. Start at 3000, or 2048 instead of 64 and see what that does.
+      4. This is a hopeless exercise and I should try another solution.
+-------------------------------------------------------------------
+2/8/22 - Giving up on the Autoencoder using piano rolls. Haven't made progress in a few days.
+Try this: https://www.datacamp.com/community/tutorials/using-tensorflow-to-compose-music
+I looked at this earlier. They mention one-hot or many-hot encodings. The JSB Chorales dataset is MIDI but I have the code to convert to many-hot.
+I have the JSB Chorales here: /home/prent/Dropbox/Tutorials/Deep Learning and Reinforcement Learning/ar-cnn/data/JSB Chorales/
+There you can find test, train, valid directories with MIDI files
+ar-cnn/data/JSB Chorales/train/2.mid
+His notebook was full of errors. Stopped work at the first major misunderstanding. 
+-----------------------------------------------------
+Huang paper: /home/prent/Dropbox/Tutorials/Classical-Piano-Composer/Huang counterpoint by convolution 1903.07227.pdf
+      Her github page:
+      Code: https://github.com/czhuang/coconet # out of date
+      code: https://github.com/magenta/magenta/tree/main/magenta/models/coconet
+      Data: https://github.com/czhuang/JSB-Chorales-dataset
+      Samples: https://coconets.github.io/
+      
+Another idea: What if we take a piano roll, or chorale, and remove note, and get a reinforcement learning game try to guess the missing notes. It gets a reward if it chooses the actual missing note. Not this time.
+-----------------------------
+2/8/22 So, what's next?
+To recap:
+      1. I know how to find the Bach Chorales - see /home/prent/AWS-DeepComposer-Chartbuster-Challenge-April-2021-JSB-Chorales/ar-cnn/AutoRegressiveCNN.ipynb
+      2. I know how to divide them up into 128 time steps - same notebook 
+      3. So I have 797 chorale segments divided up into 128 time steps, with notes described by 128 many-hot encoded into four voices.
+Some options:
+      1. Try the approach of Huang, randomly remove notes, let the model learn the missing notes. Calculate the error of the model's replacement notes and backpropogate the weights into the model. We constrain ourselves to only the range that appears in our training data (MIDI pitches 36 through 88). In my case, that is 43 through 96.
+      Remove notes, and remember the ones you removed.
+      The time and pitch dimensions are treated as spatial dimensions to convolve over.
+      Each instrument’s piano roll and mask is treated as a separate channel and convolved independently
+Her model:
+      With the exception of the first and final layers, all convolutions preserve the size of the hidden representation. That is, we use “same” padding throughout and all activations have the same number of channels H. 64 layers and 128 channels throughout.
+      After each convolution we apply batch normalization.
+      After every second convolution, we introduce a skip connection from the hidden state two levels below to reap the benefits of residual learning.
+      The final activations are passed through the softmax function to obtain predictions for the pitch at each instrument/time pair.
+Calculate the loss function:
+      The loss function from Equation 3 is then given by 
+      L(x; C,θ) = − ∑ (i,t)/∈C log pθ(xi,t |xC,C) (9) = − ∑ (i,t)/∈C ∑ p xi,t,p log pθ(xi,t,p |xC,C) 
+      where pθ denotes the probability under the model with parameters θ = W1,γ1,β1,...,WL−1,γL−1,βL−1. 
+      We train the model by minimizing Ex∼p(x)EC∼p(C) 1 |¬C|L(x; C,θ) (10) with respect to θ using stochastic gradient descent with step size determined by Adam [22]. The expectations are estimated by sampling piano rolls x from the training set and drawing a single context C per sample      
+      Unlike notewise teacher-forcing, where the ground truth is injected after each prediction, the framewise evaluation is thus sensitive to accumulation of error. This gives a more representative measure of quality of the generative model. For each example, we repeat the evaluation process a number of times to average over multiple orderings, and finally average across frames and examples.
+      We allow the model to revisit its choices: we repeatedly mask out some part of the piano roll and then repopulate it. 
+
+Looking at an alternative implementation here https://github.com/kevindonoghue/coconet-pytorch.git
+I needed to create a new conda environment:
+      flatpak-spawn --host toolbox enter csound
+      conda create --name torch
+      conda activate torch
+I think it needs python 3.7
+      mamba install python=3.7
+      conda install mamba          
+      mamba install pytorch-cpu torchvision-cpu -c pytorch
+      mamba install matplotlib pandas jupyterlab mido 
+      mamba install fluidsynth
+Then use pip for these:
+      pip install midi2audio      
+
+# Find the fluidsynth location and make sure you know what fonts are available 
+      ls /usr/share/soundfonts/yamaha.sf2
+
+---------------------------------
+Had a failure in the brand new conda environment:
+
+~/miniconda3/envs/torch/lib/python3.7/site-packages/torch/cuda/__init__.py in _lazy_init()
+    160         raise RuntimeError(
+    161             "Cannot re-initialize CUDA in forked subprocess. " + msg)
+--> 162     _check_driver()
+    163     torch._C._cuda_init()
+    164     _cudart = _load_cudart()
+
+~/miniconda3/envs/torch/lib/python3.7/site-packages/torch/cuda/__init__.py in _check_driver()
+     73 def _check_driver():
+     74     if not hasattr(torch._C, '_cuda_isDriverSufficient'):
+---> 75         raise AssertionError("Torch not compiled with CUDA enabled")
+     76     if not torch._C._cuda_isDriverSufficient():
+     77         if torch._C._cuda_getDriverVersion() == 0:
+
+AssertionError: Torch not compiled with CUDA enabled
+
+I found the problem in the header, and where it affected the performance:
+      device = 'cuda:0' # this is in the first import cell as a constant that's not capitalized.
+      model = Net().to(device)
+      # prep x and C for the plugging into the model
+        x = torch.tensor(x).type(torch.FloatTensor).to(device)
+        x = x.view(1, I, T, P)
+        C2 = torch.tensor(C).type(torch.FloatTensor).view(1, I, T).to(device)
+Fixed it by changing removing all references to .to(device) 
+      device = 'cuda:0'
+      # model = Net().to(device) # Since I don't have Cuda, just drop the function. 
+      model = Net()
+So, it wasn't the torch library that was causing the problem, it was the source code.
+--------------------------------------------
+The jupyter notebook keeps crashing, like every 4-5 hours of use. Not a good sign. I'm going to open it on the HP800 that has 32GB compared to 16 GB on my T480.
+----------------------------------------------
+2/10/22 Trying the jupyter notebook on the HP800. It's working there. I think the memory is helping. It now outputs a new midi file every half hour, named by the iteration through the model I'm up to 18000_midi.mid now, which I presume is 18,000 out of 30,000 iterations. Should be done tomorrow. Up to 20500. Still doing 500 iterations every half hour. 1000 per hour. So the next 10,000 should run in 10 hours, finished at 11:00 pm tonight. fingers crossed. I'm pissed they didn't bother saving the current state of the model periodically. What if it fails? Total of 30 operating hours to train the model on an 8-core server. I noticed that it says it's operating at 400% most of the time, indicating it's using have the 8-core system.
+----------------------------------------
+What's next. I still like the idea of a reinforcement learning approach, using Stable Baselines3, ctcsound to play notes as the appear, but I need a way to chose notes and evaluate the rewards.
+Perhaps I can use muspy to pull interesting musical samples and run them through a model to learn the style, then suggest following notes, and send those to the game where the results are evaluated for reward.
+------------------------------
+2/13/22 What's next:
+So I now have 59 midi files in a directory. It's in different places on each computer. I'm thinking of putting the coconet/pytorch directory in Dropbox. I'll do that on the HP800.
+The tuning is 12-ET, which sounds bad on the piano samples. How can I fix the tuning?
+1. Get fluidsynth API to actually work. I tried that all day Sunday and it never worked.
+2. Make Csound the player of MIDI files.
+3. Forget about the MIDI files and study how the algorithm and the jupyter notebook actually work. I should probably understand how the two sections fit together. The first is kind of a dry run, searching for what the model can do, and the actual learning is the second section, 30,000 epochs.
+------------------------------------
+I wonder if I should take a closer look at the use of cuda. There might be a better way to drive it to the CPU with
+      Don't forget to change the sound font to the location on my computer.
+A few changes:
+      1. Remove the requirement for a GPU:
+            device = 'cuda:0' # this assumes the user has a GPU 
+            device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+      2. fix the typo here: 
+            midi_output.save('str(pad_number(id_number)) + 'midi.mid') # remove the extra quote before str(
+            midi_output.save(str(pad_number(id_number)) + 'midi.mid') # remove the extra quote before str(
+      3. Fix a typo 
+            prediction = harmonize(y, D) + 30  # needs the third parameter, model
+            prediction = harmonize(y, D, model) + 30 # this works.
+      4. Typo: 
+            for g in optimizer.uparam_groups: # extra letter "u" should not be there.
+            for g in optimizer.param_groups:
+      5. Typo: 
+            axs[1].imshow(np.dflip(alto_probs[0], axis=0), cmap='hot', interpolation='nearest') # don't know a dflip
+            axs[1].imshow(np.flip(alto_probs[0], axis=0), cmap='hot', interpolation='nearest') # remove the d in dflip
+            
+It failed on the T480 again. Twice. Then it ran fine for four hours. Did not improve from the 30,000 iteration learning phase. The MIDI files are so quiet! How can I fix this? Use Musescore instead of Rythmbox. It uses a different soundfont so the vocals sound correct. 
+--------------------------------------------------  
+2/18/22 What's next:
+Extract the section of the notebook that includes loading the model and doing predictions. 
+Find a way to play them with the correct tuning. FluidSynth doesn't support tuning when the language is python, but Csound could play MIDI files. Or I could convert them to the pandas data frame and use the piano.py module to play them in VRWT.
+What is the reference to Goldberg in the notebook?
+Write some code to include arpegios in the performance. Variations, after all. 
+-------------------------
+So let's take a closer look at the examples in the first chorale constructions and the functions used.
+1. piano_roll_to_midi(piece) - takes in an array of shape (T, 4) - returns a midi file in the form of a mido.MidiFile() 
+2. Class Chorale as several functions:
+      __init__() initializes the instance with shape (4,32) with random values (0,57) turns it into 4 1-hot encodings 
+      to_image() - prelude to plt.show() - fills out the piano roll for display 
+      play() - converts the piano_roll to midi, saves it to a midi file: midi_files/midi_track.mid, then displays a widget to play it.
+      elaborate_on_voices() - takes in voices one of (0, 1, 2, 3) and a pointer to the trained model. 
+            create a mask = np.zeros((I, T)) # where I is # of voices, and T is number of samples (32)
+            initialize y to random values (P, size=(I, T)) # P is number of pitches used, 132 is size(I, T)
+            set the voice you want to preserve to a copy of the original 
+            return (harmonize(y, mask, model)) 
+      score() - Give yourself a consonance score and a note score. 
+            consonance returns a high value if the notes are in a triadic type relationship. I'm suspect at his method.
+            note returns a high value if voices are not playing the same note.
+            I don't see where this is used anywhere in the notebook. All that work for no usage. Strange. How does he evaluate the quality of the generated output? He just tries to get ones close to the ones in the training set. 
+            That's good enough!
+      harmonize(y, C, model) - using the trained model, take in an array y with the source piano roll,
+            C is an array of notes you want to keep (harmonize to). 
+      generate_random_chorale(model) - initialize a random y and zero C and call harmonize(y, C, model) - never used
+All except score and generate_random_chorale are used in the notebook. 
+I added call to score each input sample chorale snippet to evaluate the results.
+This was the result: high_c is the most consonant, per the author's scoring 
+low_c is least consonant. I actually liked those that scored low in consonance.
+      high_c: 192 at sample 3, low_c: 142 at sample 3345
+      high_n: 49 at sample 2367, low_n: 12 at sample 3   
+----------------------------------------------------------------------         
+I wonder if I could use the muspy scoring method to check the results?       
+See the git repo at ~/muspy. 
+I will need a way to save a midi file to a muspy Music class.
+      muspy.read() # read a MIDI, musicXML, or ABC file 
+      Can also load from a midio object, which coconet-pytorch uses.    
+            From piano_roll_to_midi(piece) # called with a piano roll object piece
+            mid = mido.MidiFile() # create the object, then build the object from a piano roll.
+            return(mid)
+The muspy evaluation options are pretty useless.   
+      music = muspy.read('/home/prent/Dropbox/Tutorials/coconet-pytorch/midi_files/29000_midi.mid')         
+      print(muspy.pitch_range(music)) # 33
+      print(muspy.n_pitches_used(music)) # 17
+      print(muspy.n_pitch_classes_used(music)) # 8
+      print(muspy.pitch_entropy(music)) # 3.94
+      print(muspy.polyphony(music)) # 4.0
+      print(muspy.polyphony_rate(music)) # 1 - every time step had four notes playing at the same time
+      print(muspy.scale_consistency(music)) # 0.966  returns the value of the best scale, but not the scale
+      print(muspy.pitch_class_entropy(music)) 2.86
+      rate = muspy.pitch_in_scale_rate(music, root, mode) # where music is muspy class root is 0-11, mode = 'major' or 'minor'
+      def find_best_key(music): return ('D ','major',1.0) # I wrote code to determine the best 
+      print(f'Best key found was {find_best_key(music)}') #  ('D ', 'major', 0.966) # <-- do I really care what key it's in? I don't think so.
+---------------------------------------------      
+Next step, update the score function in coconet-pytorch to include some of these measures. 
+Or maybe just ignore that, and instead use the ones in muspy.
+First, figure out how to use the score method against a muspy structure.
+That's backwards. I have two tasks:
+      1. Is the score consonance measure accurate. Perhaps, yes, perhaps no 
+      2. If we don't care about that, then run the array of muspy tasks against the output of the coconet-pytorch model.
+So now I figured out how to save a file based on the Goldberg melody fragment. 
+I was able to randomize that, results look good. See 30000midi.mid file for a result.
+Scored them too. So now I can generate bunches and score them individually. 
+-------------------------------------------------
+2/20/22 - What we know so far.
+I tried to harmonize the Goldberg Variation theme but ran into two problems:
+1. The Aria uses lots of 32nd notes and the Chorales are divided into no more the 1/16th notes. I suppose I could cut the speed in half, but I don't think that would help.
+2. The harmonizations are really crazy. They don't take the cue from the notes of the melody. For example, my theme is in G major. Why so many Bb? and F natural. Weird. Maybe it has to be in the key of C? That's it. Just subtract 7 from the key of G and it can handle it. Is there a way to transpose using the functions of the Chorale class? Maybe. Or maybe I could make it.
+3. Aria is in 3/4 and the harminization expects to last 32 1/16th notes, and assumes it's near the end when it near the end. Could I insert a beat in each measure?
+4. Should I switch to  a different chorale tune? A Mighty Fortress Is Our God?
+
+      melody = [79,79,79,0,  79,79,79,0,  81,79,81,83, 81,81,79,78, 
+            76,76,74,74, 74,74,74,0,  67,66,67,67, 69,67,66,67]
+      for i in range(32):
+            if melody[i] > 0:
+                  melody[i] -= 7
+----------------------------
+I need a way to input melodies faster than hand coding the midi number for each note at 1/16th note states.                   
+Here is what Chorale expects: 
+      sample = [[74, 70, 65, 58], [74, 70, 65, 58], [74, 70, 65, 57], [74, 70, 65, 57], 
+          [74, 70, 67, 55], [74, 70, 67, 55], [72, 69, 65, 53], [72, 69, 65, 53], 
+          [70, 70, 67, 55], [70, 70, 67, 55], [70, 69, 67, 51], [70, 67, 67, 51], 
+          [69, 69, 60, 53], [69, 69, 60, 53], [70, 65, 62, 50], [70, 65, 62, 50], 
+          [72, 67, 63, 53], [72, 67, 63, 53], [72, 67, 57, 51], [72, 67, 57, 51], 
+          [70, 65, 65, 46], [70, 65, 65, 46], [70, 65, 65, 46], [70, 65, 65, 46], 
+          [70, 65, 62, 46], [70, 65, 62, 46], [70, 65, 62, 46], [70, 65, 62, 46], 
+          [70, 65, 62, 46], [70, 65, 62, 46], [70, 65, 62, 46], [70, 65, 62, 46]]
+      chorale = Chorale(np.array(sample).transpose(), subtract_30=True)
+      chorale.play()
+If the key is not C, then I need to transpose what I've imported, then transpose it back after it is modeled.      
+Boy is this MIDI stuff complicated. Try this: https://www.twilio.com/blog/working-with-midi-data-in-python-using-mido
+https://medium.com/analytics-vidhya/convert-midi-file-to-numpy-array-in-python-7d00531890c
+Chopin nocturne opus 27 no 2 http://kunstderfuge.com/
+------------------------------
+2/22/22 - So I was able to implement read from MIDI to a Chorale class. First converted to piano_roll, then figured out the click count, then load every 1/16th note into a numpy array. Along the way obtain the key signature, and the time signature.
+Figured out how to use elaborate_on_voices. It's basically what I've always wanted: tell it which part to preserve, and harmonize all the others. The problem is that I was carelessly Chorale(something) that did not need to be Chorale'd.
+Rule:
+      If you are going to use one of the Chorale class methods, you have to be a chorale. For example:
+            chorale.to_imgage() # show a piano roll version 
+            chorale.score() # evalate the consonance and # of notes
+            chorale.elaborate_on_voices() # mask one voice and harmonize on that voice 
+            chorale.play()
+      Otherwise, what is returned from harmonize or generate_random_chorale is not itself a chorale, it's just a numpy ndarray.
+      Note that when it's a chorale, it's 30 MIDI steps below reality. When you convert it to a numpy array with a function like chorale = chorale_type.elaborate_on_voices([keep], model) you have to add 30 to the returned numpy ndarray:       save_midi_chorale(chorale + 30, id_number)
+
+A Mighty Fortress is a nice hymn, but it starts on an upbeat, which makes it challenging to figure out which measures to preserve.
+What's next? Fix the tuning. I know I can't get FluidSynth to set a tuning by octave or individual notes. So what else can I do? Set up Csound to process a numpy array of notes and times so I can have them in the right tunine. VRWT.
+Maybe I could do it this way: https://github.com/MarkCWirt/MIDIUtil/issues/12
+No, that maps midi numbers to specific hertz. Like if you were doing 31 TET and you used 31 keys to do it. I don't want that. Here are the functions of fluidsynth that have been implemented in pyfluidsynth:
+      fluid_synth_activate_key_tuning - Set the tuning of the entire MIDI note scale, all 128 keys 
+      fluid_synth_activate_tuning - activate tuning to a channel
+      fluid_synth_deactivate_tuning 
+      fluid_synth_tuning_dump 
+What I would like is if could be 
+      fluid_synth_activate_octave_tuning - Activate an octave tuning on every octave in the MIDI note scale.
+      But that's not available in python. Actually, I don't think any of these are active in fluidsynth in python.
+            synth.fluid_synth_activate_key_tuning()
+      AttributeError: 'FluidSynth' object has no attribute 'fluid_synth_activate_key_tuning'
+​---------------------------------
+2/23/22 Good morning. Try this: https://www.pataphysical.info/pytuning-a-python-framework-for-exploring-musical-scales.html
+Could not get it to load. Crazy. But it suggests that the command line version of FluidSynth can read in a tuning table, even if the python library can't. See info here: https://pytuning.readthedocs.io/en/0.7.2/tables.html
+      #           +-- don't create a driver to read in midi events
+      #           |+-- don't read from the shell
+      #           ||  +-- set the gain to 10
+      #           ||  |    +-- use this font
+      #           ||  |    |        +-- process this midi file
+      #           ||  |    |        |              +-- render it to this wave file
+      #           ||  |    |        |              |           +-- load this command configuration file
+      fluidsynth -ni -g 10 font.sf2 30000midi.mid -F test.wav -f just.name
+It doesn't affect the pitches one bit. Bummer. It doesn't look like the fluidsynth developers care much for microtonal work. I could create a command line invocation of csound that would work. But it's not worth it. Just keep the current 12TET version. 
+--------------------------------------------
+I was able to get the piano.py to work, but only with a pandas dataframe. I think I could make it work with a midi converted to a piano_roll. Look at the midi_to_input for an example. 
+I noticed that the goldberg5.csd is using the 214 tone scale. I thought I had converted that to 12 VRWT? I had to change some of the notes from the GnMaj to remove the octave alterations.
+So there are two goldberg5.mac uses the limited sample set. 
+goldberg6.mac uses the full set
+They both use the f3 214 tuning set. I must not have changed those.
+goldberg_var3.mac and goldberg_var3.csd has the VRWT scale, but no notes.
+goldberg_aria1.mac.csv has the VRWT notes
+goldberg_aria1.csd has VRWT expectations, but I think it has the full samples, causing failures when it runs.
+compare it with goldberg_aria2.csd. aria2 has just the aria, aria1 has the whole mess.
+Both have full sample sets. 
+Altered goldberg_aria1.mac to use the small sample set. It already was just the aria.
+Don't forget that I had to add this just before the notes in the csd file so that it would play.
+f 0 14400 ; added to make it play forever in the python ctcsound and jupyter notebook version. 
+That was a tough one to figure out. On to the next challenge:
+      convert a midi note number to note/octave pair.
+So I figured out the conversion. Next step is getting some audio.  The test_csound_piano function works fine, playing a csv file of notes. The play_midi_piano is able to read the midi file into the sample, root, mode. I can then adjust the note/octave from the midi note number. I then create the pfields, pass it to pt.scoreEvent(), but no sound comes out. I can't figure out why. Time for a walk in the snow.
+--------------------------------------------------
+2/24/22 I think the problem is with the pfields data type or organization.  It turned out to be that I left out the closing of the pt and cs objects. Doh!
+Now I need to increase the duration of the notes that are held. The piano roll just indicates that a note is being sounded, not it's duration. 
+I found a better way using examples in the muspy source code for to_piano_roll. 
+A few problems:
+      The octave is one too high, and when I subtract one it plays all the same pitch. That was because I overlooked the fact that octave was needed to calculate the tone to pass to csound from the note.pitch value. I fixed it.
+      The duration, time are all too long. Need to double the tempo. And I don't have access to the t0 tempo indicator in csound, so I have to state everything in terms of seconds. So I divided it by four while assembling the pfields. 
+It works. What's next? Fix the notes. The csound is playing up a minor third. Or close to that. look in goldberg_aria1.csd. 3nd glisssando was set to 4.0, up a ratio of 9:8. My error.
+Found a way to isolate tracks in the notebook. Commented them out because I don't think I'll need them in the future.
+-------------------------------------------
+So what's my strategy:
+      1. Find a decent well known chorale that is in 4/4 time with an available MIDI file in the key of C major, or with a key signature present in the midi file that I can use to transpose it to C before sending it throught the Chorale model.
+
+      2. Break it up into 2 measure segments.
+
+      3. Create several variations on the melodies.
+            a. score the variations and the original
+            b. pick the best by some measure
+            c. string them together into a full chorale rendition 
+            d. use this as the basis for some variations using some deep learning algorithm.
+                  - maybe 
+These start on the upbeat: A mighty fortress is our god. O sacred head sore wounded. O God our help in ages past
+
+Some that might work: lo, how a rose e'er blooming
+I'm amazed at the Bach Chorales in this collection. Almost all start on the up beat, or have phrases that extend beyond two measures, or other variations of time.
+Take for example BWV 180 Schmücke dich, o liebe Seele (Adorn yourself, O dear soul)
+/home/prent/Downloads/chorales_018007b_(c)greentree.mid
+1st through 4th phrases are 2 1/2 measures long. 
+5th is two measures, last is 3 measures. That Bach was tricky. 
+------------------------------------
+I should probably render the csound file to a file, instead of playing to DAC. If it's a long MIDI file I have no way to stop it without killing the kernel. I was so excited when I finally got Csound rendering to audio, that I didn't stop to think about the case where I'd like to stop it before the end.
+--------------------------------------
+2/26/22 working on loading BWV 180 Schmücke dich, o liebe Seele. 4/4, F major, interesting stucure.
+Now I have the midi file loaded into 6 segments:
+By the note numbers in BWV 180 Schmücke dich, o liebe Seele.png
+segment     note#       measures    start end keys
+0           1-9         2 1/2       F       F
+1           10-18       2 1/2       C       F      
+2           19-27       2 1/2       F       C 
+3           28-36       2 1/2       F       C
+4           37-44       2           C       C 
+5           44-52       2           A min   C 
+6           53          1           C       C
+
+So let's start by preserving the bass part and see what develops.
+I'm going to go segment by segment to create 10 versions. each will be named by segment number
+40000midi.mid and up for segment 4.
+I'm not getting much useful information from the scores. I'll keep looking.
+
+-----------------
+2/28/22 So I finally got around to trying to send some non-standard sized segments through the model. In this case, to reharmonize a bass part. Segment 1 is 2 1/2 measures. Each measure is 16 beats, 16 * 2.5 = 40. With four voices the attempt to one hot encode and reshape the input to (I, T, P) fails.
+I = 4 # number of voices
+T = 32 # length of samples (32 = two 4/4 measures in 1/16th note increments)
+P = max_midi_pitch - min_midi_pitch +1 # number of different pitches currently 57
+
+What are my alternatives in this case?
+      1. Drop the last 1/2 measure, 8 beats
+      2. Compress the last 16 1/16th notes by squeezing them into 8 beats. Reduce the duration of the notes, then expand them back out after they return from the model.
+      3. Pick a different hymn. But try to expand parts of the time so that it's not all in two measure chunks. 
+So the day ended with finding a way to transpose the play_midi_piano back the original key.
+But I am still not resolved on which compression method and how to implement it. It would work with segment 0, but segment 1 would have to compress two 1/16th notes into one. And the expansion would lose that level of detail. I could chop off the last measure in segment 5, then just add a final chord by itself. 
+---------------------
+3/1/22 I spent way too much time on trying to slice a python list. It's just not up to the numpy syntax. I gave up and made the slicing function work with np_segment = np.array(python_list)
+Works now.
+---------
+Csound only processed the first ten seconds of the midi file. Might be the f0 macro. No, I increased that and it did not help. 
+Look at the notes sent to the ctcsound instance and log them. Also, restart the logging each time. 
+Also, the compression of the segment is not working properly on the 40 slot segments. And don't forget you promised to expand them back out after the return from the model.
+The play_midi_piano function transposes based on what, exactly? The value of transpose is added to the note to create transposed_pitch. It's passed in the play_midi_piano(path,volume, transpose=0). So it assumes zero, but when is it needed?
+---------------------------------
+3/2/22 I resolved the problem with csound only playing the first segment. I have to chalk it up to the butterfly effect...
+Anyway, it's working now on the whole file. I implemented the log restart, and put back the logging of each note. Once I did that it started working. Weird.
+But I still need to decompress the segments that I compressed from 40 to 32 slots. And also make sure I did the compress correctly. 
+play_midi_piano is still cutting off before the end of the piece. Perhaps it needs a longer delay. I upped the delay to start/4 seconds. At the end, start is the start time of the last note in the piece. Now it was cut off because the f0 in the .csd file asked for only 65 seconds, and that's when it stopped creating sound. So that number has to be greater than 65. Changed it to 80. I added some calculations to the play_midi_function to provide a delay based on how many notes need to be created by Csound, allocating one second delay for every 30 notes. And suggesting the setting for the f0 parameter. At some point I may decide that I need to wade into the piano.py load_csd function to look for the f0 and make the change to the 'f0 00081' when it is encountered. But we won't know how long it will be until much later in the code. By the time I know how long it will be, I've already passed the long csd_content string to the ctcsound instance. I would have to calculate how long the piece is before I load the csd_content to ctcsound. 
+When you feel it is necessary, use this info to implement a regular expression replacement https://stackoverflow.com/questions/4893506/fastest-python-method-for-search-and-replace-on-a-large-string
+For now I'll just have to remember to update that before running each segment. 
+---------------------------------
+3/6/22 I spent all morning fixing the segmentation of sample(320,4) into segment(6,4,40) with zero padding of segments 4 & 5 and segment 6 padded with additional held notes.
+So what's next? All the segments have a length of 40. But how can I pass a subset of the array to the model? 
+      sub_segment = segment[:,:,:32] # you need 3 numbers for a 3 dimensional array
+Duh!
+My numbers in sample and segment are floating point. Model needs integers. 
+To fix that initialize the array 
+      segment = np.zeros((7,4,40),dtype=int)
+Now they will forever be integers.      
+Next step is to make it through the last cell where we reharmonize while keeping the bass part. 
+--------------------------------------------------------
+3/7/33 Next step:
+Work on decompressing those segments that were compressed after they emerge from the prediction model. This is the start of concept of variations. Take a small segment and transform it. Pass in a few notes and expand or contract it in time. Or not. Just add or subtract notes based on others in the same measure, not played at the same time. Use the concept of a descant, a higher expression of some basic concept found elsewhere. Or arpegiation. Or long held notes. Slowing or speeding up. 
+
+I also need a way to combine several samples into a complete chorale. 
+1. Fix the decompression first
+2. Then combine segments into a full chorale
+
+I also need to make sure I have the best scale for the keys.
+Try the Secor VRWT.
+Make it possible to play musescore with a scala tuning file, and play the keyboard.
+Check this interactive scale explorer. Minimal, but it has a VRWT scale. https://mizzan.de/archive/fulltable.html
+Retuned it on F and that seems to work.
+Problem: All the midi files created yesterday are in G, not F. What happened?
+midi_to_input should have added root, not subtracted it. No, that was wrong. Too simple. It ended up in A#. Try this:
+      sample[time_interval][voice] = i - (12 - root)
+Nope. When midi_to_input is run, it produces the first chord as 
+# note transposed note  #     what's in sample - transposed into C
+53 F        C           60    melody line: 64 E 62 D 60 C 62 D   
+60 C        G           67          
+65 F        C           72          
+69 A        E           76
+So, anyway, why are the predictions out of the model in G?
+When a Chorale instance is created, it defaults to subtract 30 midi notes. This is to take it down to the range between 86 and 30, a range of 56. The lowest note in the chorale database is 30, so we can ignore anything lower than that. Inside the call to 
+Chorale.play is called, it adds 30. 
+Inside the save_midi_random it adds 30 to the prediction
+The next time we see the midi values is in the cell that does the compression from 40 to 32 for segments 0,1,2,3. Melody is 64 62 60 62, which is E D C D. That's still in C.
+After it goes to save_midi_harm, which calls elaborate_on_voices, it's stiill in C. That's good. I don't know why I saw it in G. All the midi files based on the last segment are in G. But none of the other segments are in C. I don't have a clue why the last one ended up in G. It's not there now.
+What I need to do is upon the exit from the prediction, is transpose it from C to F. So, add root to the output of the prediction model. Do that in one stroke by this:
+      sub_segment = segment[:,:,:32] # chop from 40 to 32 slots
+      sub_segment = sub_segment + root # take it up from C to the original key
+Gotta love numpy here. One line to process six segments, 40 slots each segment, four voices each slot. But now my carefullly assembled save_midi_chorale no longer works.
+I fixed that mostly by simplifying the function as much as possible. But the sub_segments contain some very odd low notes in the melody part. That's because it turns a zero value, which means don't play anything, into a 5 value, which is a very low F. I need to check every value to see if it's zero, and if it is not, then transpose it.
+Created a function that is passed an array, and it adds the passed root value to each element of the array. Had trouble with it because the local variables were actually global without my knowledge. Passing through it several times caused subsequent transpositions from C to F to Bb. And on and on.
+Still haven't started the decompression function.
+Got that done, but I'll need to decompress between the times I call the model for a prediction and when I save the midi. So it will have to be in the save_midi_harm function.     
+While I'm at it, I should convert it into a function that takes the whole segment in and returns one of the right shape for passing into save_midi_harm.
+
+Next up: concatenate the segments back together again. Harder than I expected. As I expected.
+Now working on a concatenation of predictions for harmonization of the bass line. The ending has some midi number 5, which is transposed 0. I thought I made sure that no zero values woult be transposed.
+-----------------------------------------
+3/9/22 Some new ideas:
+1. Make csound a subprocess so I can control the f0 and time to completion more closely.
+2. Play the notes as they are being predicted by the model, inside the model code. This might be a bit challenging. Listen as it hunts around for the best harmonization. This might be interesting.
+3. concatenate two predictions for the same segment vertically, so there are 8 voices, or 12 of 16. Could be interesting. Random dropouts. Except all the existing function s are all designed for 4xN arrays. The new concatenated prediction arrays force it to be a 16x40 due to the extra voices. I'll need to make my own play function. 
+
+How can I do that ideas:
+1. Call ctcsound directly - take the 16xN piano roll array as input. 
+As I always seem to be doing, I'm dealing with dimensionality issues most of the time.
+But sometimes is just a matter of one variable name being left over when I changed the others long after testing a function. 
+------------------------------
+3/10/22 - Idea: I don't think concatenate is the process I want to use. I think reshape is much more sensible. The problem is that the segments are a different length, so maybe concatenate is the only way to get it done.
+So I have the performance function to play the thicker chorale (16,264), but it plays each note even though it may just be a held note. I need to remake that function.
+I should take a look ot the piano_roll_to_midi function in the coconet pytorch notebook. Could I extend that to cover more dimensions?
+------------
+3/11/22 Taking a look at muspy https://salu133445.github.io/muspy/_modules/muspy/inputs/pianoroll.html#from_pianoroll_representation
+def from_pianoroll_representation(
+    array: ndarray,
+    resolution: int = DEFAULT_RESOLUTION,
+    program: int = 0,
+    is_drum: bool = False,
+    encode_velocity: bool = True,
+    default_velocity: int = DEFAULT_VELOCITY,
+) -> Music:
+This might be used to import from a piano roll to a music class and then to perform it. But for now my solution is working well. CPU is very high, so I need to reboot.
+Also, send some up or down an octave as they come out of the prediction, especially the base octave lower and the soprano an octave higher. Better to do that in the csound realization section and keep the chorale pure.
+The final chord is sometimes the most interesting part of the piece. What if I made each note the equivalent of that chord.
+Make a separate prediction for each quarter note. 
+-------------------------------
+3/13/22 ideas
+✔ 1. Fill out the samples with more example. Today you have only level 47 samples. You will need to run samples again with a mcgill.dat that includes more samples as a new bosendorfer list of samples. This took a bit longer than expected, but I now have samples that include seven different samples, all in the mezzo piano to forte area.
+
+      So I screwed up and blindly copied the goldberg_aria1.csd from the csound directory to the coconet-pytorch directory. That eliminated the carefully arranged f3 scale table, and also chopped off the f0 timing table. And probably some other things. 
+      To fix that and avoid screwing up the dropbox replication scheme:
+            1. make a copy of goldberg_aria1.csd as goldberg_aria1 copy.csd
+            2. Go to dropbox.com and recover goldberg_aria1.csd to what it was like yesterday.
+            3. compare the two, and make the changes to goldberg_aria1 copy.csd
+            4. remove the goldberg_aria1.csd file
+            5. rename goldberg_aria1 copy.csd as goldberg_aria1.csd
+      There was also the issue of the sample file names changing. And the delay_time in the notebook to enable csound to finish it's work. Added back the f0 139 line. added back the f3 scales. Added as much as I could back into the mac file.
+
+      Notice that the range of the velocity is very small. Anything 60 or less uses the 25 sample set, which is very soft and quiet, while anything 72 or more uses the 85 sample set. There are three additional sample sets at 99, 113, and 127, which I left out of the csound csd file to reduce storage. To better use the available space, I think it might be better to eliminate some of the higher notes in all the samples, and use that space reduction to allow for inclusing the louder ones, but that's a job for another day.
+
+2. Consider splitting into smaller segments, like just a measure per segment. The problem there is that the movement of the chords will be lost. I like the final chord variations though, with a long time to explore.
+
+✔ 3. Little things you can get done in 1/2 hour:
+      1. tweek the velocity to include more sample types. 
+            random_velocity = velocity + np.random.randint(-3,2)
+      2. Add just a bit to the duration so that there is less of a gap between the notes.
+      3. Convolve with the Italian Theater 
+            csound goldberg_aria1c.csd
+      4. edit with Audacity and post to the ripnread.com blog
+      5. update Wordpress on the blog - first time failed, as did the next two times. Not a good sign.
+      6. Don't increase the octaves by 2 in the soprano parts 
+
+
+✔ 5. Ideas I put in the notebook:
+      Find a model for variations based on my dreams last night. 
+      - add or subtract notes based on others in the same measure, not played at the same time. Use the concept of a descant, a higher expression of some basic concept found elsewhere. Or arpegiation. Or long held notes. Slowing or speeding up.      
+      - Don't stop at 4 stacked chorales. 
+            outfile = 'chorale.npy' #<-- if you don't end it with .npy then it appends .npy to the name automatically
+            np.save(outfile, concat_chorale)
+            saved_chorale = np.load(outfile)
+            
+✔ 6. Scatter the start time by a slight amount. Use rng.standard_normal(1)
+
+✔ 7. Load the piano rolls into muspy music and display them on the screen. I've tried several options for data representation, and none are at all usable by my current data structures. These are supported by the Music class:
+      Pitch-based - monophonic only
+      Piano-roll - Tx128 array one hot encoded 
+      event-based - note-on, note-off 
+      note-based list of tuples: time, pitch, duration tuples
+      My representation: voices with note numbers at each time step. So if I want to use the music class, I have to create a MIDI file and read it into a music class. But the muspy in reality offers very little. The score creating is one clef only, and only a few notes. The piano roll display is for shit. The measurements are irrelevant to real musical quality.  It's not worth the trouble at this point.
+
+✔ 8. Create a machine that manufactures chorales, based on each of the four voices, 8-10 each, plus one for random chorales note based on anything. The random ones are really bad. But the ones that keep the bass are the best. Those are named:
+    +-- name collection
+    |            +-- voice that was preserved. 0: soprano, 1: alto, 2:tenor, 3:bass
+    |            |+-- which one of several made, this is the zero'th in the series.
+    saved_chorale30.npy
+
+✔ 9. Set up the HP800 to generate new chorales. 
+      http://192.168.68.72:8888/lab?token=ecfa55137841420a5d4146b89971f1c86883825669ad9a49
+      Make some random ones. But I think I need to make it so it makes one random one, and then I use that one as the model and keep one or more voices from it to make the other three that sit on top. Otherwise we get chaos. We will see. It's running now. Even that idea didn't help. They sound nothing like Bach. It's almost like the model is not working properly. No, I see that I stopped keeping the bass part and made that a variable keep: 
+            keep = np.random.choice([0,1,2,3]) # changed this to just ([3]).
+      So there is one called sement600.npy, which is segment 6, the final whole note chord, copied into the other segments and then hold the bass as keep. This sounds pretty good. I'll make more. 
+
+✔ 11. Try to test the scores in muspy with some of the newly created MIDI files that are 16 voices.
+
+✔ 13. Make it possible to analyze the numpy stored chorales based on the bass line of Schmucke, now stored in numpy_chorales directory. Follow this pipeline:
+      - read in a chorale from numpy_chorales
+      - call piano_roll_to_midi - it returns <class 'mido.midifiles.midifiles.MidiFile'>
+      - call mido to music - music = muspy.from_mido(midi)
+      - score the music class against the standard set of scores
+
+
+✔ Figure out a way to include arpeggios like in Well Tempered Clavier Book 1 Prelude in C major.
+      C in the bass held for 2 quarter notes 8 1/16th notes
+      then 1/16th note later E held for 7 1/16th notes
+      then arpeggio G C E G C E
+      Score: Bach Well Tempered Clavier IMSLP173661-PMLP05948-1 full.pdf
+      mac: /home/prent/Dropbox/csound/recent_archive/wtc.mac
+      How can I get something similar in the notebook? 
+      Call a function passing several notes, and mask to make notes silent. Worked the first time!
+
+------------------------------------
+3/21/22 All the ideas that haven't been checked off above
+
+✔  Before sending the note to csound, maybe as a step in the process. If the eight notes being sounded are dissonant, maybe change one of them to zero, hold your previous note?   
+
+✔  Ideas about how to arpegiate notes.
+      - It will have to know the timing into which the arpegiated notes will fit. 
+      - today they are a string of things happening at 1/16th note intervals [69 69 69 69 67 67 67 67 65 65 65 65 67 67 67 67]
+      - A G F G over four quarter notes
+      - That's just one voice. But an arpeggio would replace a chord 
+            array([[64, 64, 64, 64, 62, 62, 62, 62],
+                  [60, 60, 60, 60, 59, 59, 59, 59],
+                  [55, 55, 55, 55, 53, 53, 53, 53],
+                  [48, 48, 48, 48, 43, 43, 43, 43]])
+            Now imagine you want the top three voices played as an arpeggio. Use the concept of a mask:
+                  See coconet_arpeggio_chorale.ipynb
+
+✔  The arrays being saved are in the key of C and too low. Stop the presses. How long has this been going on? I'll have to write some code to read the array in, then increment the whole thing, and write it back out. Should take about a line of code. Make sure to use the transpose_up_segment function, since it can handle any dimensions, and a simple increment will screw with the purposely zero MIDI note values. I no longer care about those stored numpy arrays. I've moved on. 
+While trying to fix that I discovered a terrible error in one of my recent changes that I made a few days ago. HUnting down the consequences will be challenging:
+      In piano_roll_to_midi(piece)
+about ten lines down:
+      for voice in play_chorale 
+Should have been:      
+      for voice in piece
+Fortunately that bug probably didn't affect much, since it's only concered with how many voices, and that hasn't changed.  
+-----------------------
+FTP to Godaddy
+
+flatpak-spawn --host bash 
+
+cd ~/Music/sflib
+
+ftp -n 50.63.92.48 << EOF
+quote USER prentrodgers
+quote PASS 33Erigeron#
+binary
+cd listen 
+put goldberg_aria1-t14.mp3
+quit
+EOF
+--------------------------------------
+Take another look at the score function inside the Chorale class. Does it do a good job of quickly testing for consonance?
+It tracks pretty close to the muspy scale consistency.
+Where could I call this to remove notes that have a low score? In arpeggiate?
+# I need to find out which notes are causing the trouble, exclude them, then try again, until I get a better score.
+def quick_score(time_step):
+--------------------------------------------------------------------
+3-22-22 Working on the search for dissonant notes to be excluded.
+Goal is to silence those notes that are most dissonant. How do you measure dissonance? Harry Patch one footed bride.
+Info here: http://www-classes.usc.edu/engr/ise/599muscog/2004/projects/harlan-chidambaram/examples.htm
+      Intervals of Power =1/1, 3/2; 4/3, 2/1 (perfect intervals)
+      Intervals of Suspense= 27/20, 11/8, 7/5; 10/7, 16/11, 40/17 (tritone intervals)
+      Intervals of Emotion= 32/21, 6/5, 11/9, 5/4, 14/11, 9/7, 21/16; 32/21, 14/9, 11/7, 8/5, 18/11, 5/3,12/7 (thirds and sixths)
+      Intervals of Approach= 81/80, 33/32, 21/20, 16/15, 12/11, 11/10, 10/9, 9/8, 8/7; 7/4, 16/9, 9/5,20/11, 11/6, 15/8, 40/21, 64/33, 160/81 (seconds and sevenths)
+
+Rate each interval differently, instead of just a zero or one. Give the 3rds and 6ths more, the 4ths and 5ths even more, and the major 2nd just a bit, and the major 7th, tritones, and minor 2nds the least. And instead of a binary in or out, have the matrix a set of probabilities. 
+Looking at the Partch One-Footed Bride chart:
+      5 - 1/1, 2/1, 3/2 & 4/3     np.random.randint(0,6)
+      4 - 5/4 & 8/5     np.random.randint(0,5)
+      3 - 6/5 & 5/3     np.random.randint(0,4)
+      2 - 8/7 & 7/4     np.random.randint(0,3)
+      1 - 9/8 & 16/9, 10/9 & 9/5    np.random.randint(0,2)
+      0 - all others
+Code: 
+      np.random.randint(0,6) # for 3/2 & 4/3
+So I ended up just checking if the notes are in the right key and replacing those that were not. Very crude, but ended up with a sweet and charming piano solo. 
+----------------------------------------
+3/23/22
+What I need to do next. Take a chorale, keep three voices, synthesize the fourth. save the new one in an array.
+Repeat: keep three voices, including the new one, and discard one of the original ones, synthesize the missing one, save it.
+Continue dropping voices, create a new one, and save it. Do this for a while, always discarding the oldest one until you have a multi-voice chorale that sounds interesting and without too many wrong notes. 
+
+------------------------------------------------------------------------------------------------------
+I just discovered that the original coconet in tensorflow used T=128, while the pytorch implementation used only T=32. Big difference. https://colab.research.google.com/github/ak9250/coconet-colab/blob/master/coconet.ipynb#scrollTo=CwatDEYIXnS8
+That's the colab notebook that can generate the model. It failed. Probably wrong framework versions. The runtime is TensorFlow version: 2.8.0, and the code was written for 1.x 
+
+If I want to run it myself, here is the checkpoint directory:
+http://download.magenta.tensorflow.org/models/coconet/checkpoint.zip
+
+Here is a magenta notebook on colab that actually works, but doesn't do anythiong interesting: https://colab.research.google.com/notebooks/magenta/hello_magenta/hello_magenta.ipynb
+
+--------------------------------------------------------
+3/24/22 Big trouble in the arpeggiation and stretch section. I was stuck on 
+      note += np.random.choice([-24,-11,0,0,]) # I thought this would increment note, but it sent it way out of range
+When I changed it to 
+      chorale[v,n] = note + np.random.choice([0,0,12,24]) # if started working. Why? 
+I'm also stuck on figuring out if it affects other than the first 4 voices. And if so, how? Broadcasting! It's always worked that way dummy.
+On the HP800 here is the live jupyter session from a few days ago:
+http://192.168.68.72:8889/lab?token=c7225cf053b3ab8a0bf3f55cda05e21397e9a6b08d72379d
+
+----------------------------------------------------------------
+3/25/22 Two ideas:
+      ✔  Review the ideas above that were never completed
+
+      🮕  See what you can do with Bach prelude #1 from book 1 well tempered clavier. It's so sweet. In C. In 4:4. What more can I ask.? Style transfer GAN from a bach synthesized chorale to the style of the prelude is what I was going for.
+
+      ✔ Make the decompressor more flexible as to which measure is chosen from the segment. I was able to get this done in a day. Works great. 
+
+      🮕  Get back to the idea of moving the decompress around. Decompress that which was not compressed. Decompress squared. Cubed. Go decompression crazy, adding lots more notes. Double every measure, and do it again. Slow it down without reducing the density. Decrease the density while speeding up. Change the tempo throughout. Fade and slow at the end, in the middle. Start slow and gain steady state speed. 
+      
+      🮕  You are always starting out thinking you can use the ideas of Philip Glass. Use the ideas of Prent Rodgers for a change. 
+
+      🮕  Look into LSTM. Start here: https://deepai.org/publication/bach-style-music-authoring-system-based-on-deep-learning
+
+      🮕  open source representation tool based on music theory. Paper here: https://deepai.org/publication/music-embedding-a-tool-for-incorporating-music-theory-into-computational-music-applications
+
+      🮕  Try to get the original 128 slot coconet working. Or see if you can extend the pytorch implementation extended to 128.
+
+      🮕 Generalize the specific. By this I mean take the compression-decompression function and make it work in a more general way. Look at some more Bach chorales and see how he structured their rhythms. See if there are other generalizations that can be done. 
+
+      🮕 Make a github page as the code exists today. Or tomorrow. as of 3/26/22 it's in pretty good shape, in terms of removing all the irrelevant stuff. Not all the code works, of course, but a lot does. 
+
+      🮕  Take a hard look at what you can do with decompress_segment. This could be used to transform something like A B C D E into A A B B B C C C C C D E E E E E E 
+      See if you can find challenging sections of the chorale and expande them out.
+
+      ✔ Look at the synth_mix assortment. Would it make more sense to start with the higher numbered voices and end with the lower numbered ones? Also shouldn't I include the original chorale as the first one? Not so sure about that. Generalize the approach more. Same with the arpegiation mix. Generalize the mask formation. 
+      
+-----------------------------------------------------
+I remember a poet that was on that NPR about 20 years ago. She had just received some award for her work. She had kids. She said that her secret was to always spend at least 10 minutes a day on her work. Write a few lines on the back of an envelope in the car while you wait for the kids to finish soccer or something. The joke is that once you spend 10 hard minutes on something, your brain keeps working on it all day long. And who can stop after just 10 minutes if the situation presents itself? Pretty soon you are doing 2000 hours a year on something, and then you get good. Or at least better.
+------------------------------------------------------
+I have times when ideas flow like water, and sometimes they are nowhere to be found. That's when I take a nap or for a walk.
+------------------------------------------------------------------
+http://192.168.68.72:8888/lab?token=d64b654307356a5dfe1ee41c4653e187a27d8f1172834c85 # <-- started on 3/25/22
+-----------------
+3/27/22 Looking for interesting places in the highest class-entropy chorales, limited to voices 3:9 and 7:13. Mostly 7:13 with B S A T B S, two basses and two sopranos. All numbers are based on the png of Schmucke, which has one number per quarter note.
+
+chorale_18.npy: Starts very much like the original. 10 & 11 are super-weird. 24 & 25 get very high. 37-44 are all over the map. Nice ending at 53. Convert those to indexes to the chorale array:
+10 * 4 = 40
+11 * 4 = 44
+12 * 4 = 48
+
+I'm going to find that I need to start at the end and work backward with the decompressions. Otherwise the carefully identified measure numbers of the later ones will shift to higher numbers.
+
+Meanwhile, why can't I quick_play a very short segment? Needs to be padded with zeros. That's why the original coconet-pytorch added np.NaN to the end.
+
+I need a way to decompress to not only double the length, but make it 3 - 10 times as long.
+
+I also need a faster way to find these interesting parts of the chorales. 
+
+These are the most interesting parts of chorale_18.npy, if I use all 16 voices.
+
+from time_step: 8 through time_step: 11
+from time_step: 26 through time_step: 27
+from time_step: 36 through time_step: 47
+from time_step: 82 through time_step: 87
+from time_step: 92 through time_step: 95
+from time_step: 124 through time_step: 127
+from time_step: 136 through time_step: 139
+from time_step: 144 through time_step: 151
+from time_step: 160 through time_step: 191
+from time_step: 204 through time_step: 205
+from time_step: 208 through time_step: 215
+
+What if we limit it to 6 or 8 voices? What would it look like then? Grid search time?
+-----------------
+New lab on HP800
+http://192.168.68.72:8888/lab?token=7a7cafffb33f3ee52cf805af192d30de72d4c683cb4c9f55
+
+Started up 71-100. We should have enough now.
+-----------------------------------
+3/28/22 To do today:
+✔ Start by reducing the density over a grid and finding out how that affects the number of bad_notes.
+
+Here are the highest entropy 6 voice chorales:
+	file	pitch	pitch	pitch	pitch	poly-	poly	scale	class	voice
+	name	range	use	clas	entr	phony	rate	consist	entropy	range
+chorale_18.npy 	 51 	 36 	 12 	 4.75 	 4.508 	 1.0 	 0.845 	 3.262 	 (7, 13)
+chorale_46.npy 	 47 	 34 	 12 	 4.666 	 4.555 	 1.0 	 0.867 	 3.23 	 (7, 13)
+chorale_28.npy 	 49 	 35 	 12 	 4.707 	 4.305 	 1.0 	 0.875 	 3.219 	 (7, 13)
+chorale_20.npy 	 49 	 34 	 12 	 4.675 	 4.52 	 1.0 	 0.888 	 3.206 	 (3, 9)
+chorale_90.npy 	 47 	 31 	 12 	 4.587 	 4.516 	 1.0 	 0.878 	 3.203 	 (7, 13)
+chorale_91.npy 	 49 	 34 	 12 	 4.65 	 4.543 	 1.0 	 0.875 	 3.195 	 (7, 13)
+
+So my prestated goal was to decompress until the range was self consistent. But if it's not self consistent initially, it will not gain consistency until some action is taken, other than the passage of time, which may be sufficient. What if decompress also had the ability to mask some bad notes. Kind of like decompress and mask the n'th note in the v'th voice the second time through.
+
+Another idea: Bach Prelude #1 from Well Tempered Clavier book 1 has one chord per measure for the most part. All these chorales have close to 4. That implies that we could decompress by a factor of 4 and then arpeggiate.
+
+So now I'm spending time trying to figure out why piano_roll_to_csound has so many extreme notes. Midi numbers like 108-125 and 17-12-23, which are way out of range. I checked decom_chorale, and there are lots of very high and very low notes there. Also play_chorale same case. Where did they come from?
+            for voice in decom_chorale:
+                  for note in voice:
+                        if note == 0: pass
+                        elif note > 120:
+                              print(f'seems too high note: {note}')
+                        elif note < 00:
+                              print(f'seems too low note: {note}')
+seems too high note: 125.0
+seems too high note: 127.0
+
+seems too low note: -11.0
+seems too low note: -13.0
+
+Maybe I went through the arpeggiate several times and redid the extreme octave modifications. It seems like every time I go through arpeggiate_and_stretch the chorale gets more and more high and low notes. One at a time.
+
+Now I'm thinking maybe just look at the last two chorales, those in voices (8,16). Then selectively eliminate some of the notes in a chorale before arpeggiating it. That way each of the repeating patterns in the arpeggio has fewer or more notes to give it some variety. Mask it in the decompress, if the factor is over 3. 
+
+Anyway, here are the most interesting of the chorales looking only at voices (8,16)
+
+	file        pitch	pitch	pitch	pitch	      poly-	      poly	scale 	class	      voice
+	name	      range	use	clas	entr	      phony	      rate	consist	entropy	range
+chorale_46.npy 	 47 	 34 	 12 	 4.613 	 4.879 	 1.0 	 0.85 	 3.275 	 (8, 16)
+chorale_28.npy 	 49 	 35 	 12 	 4.638 	 4.863 	 1.0 	 0.858 	 3.264 	 (8, 16)
+chorale_18.npy 	 51 	 37 	 12 	 4.661 	 4.934 	 1.0 	 0.842 	 3.259 	 (8, 16)
+chorale_90.npy 	 47 	 31 	 12 	 4.502 	 4.98 	 1.0 	 0.863 	 3.243 	 (8, 16)
+chorale_16.npy 	 49 	 33 	 12 	 4.63 	 4.895 	 1.0 	 0.865 	 3.222 	 (8, 16)
+
+What if the factor to decompress was chosen randomly. 9 or fewer times. And each time make random ommissions
+
+What if I were to decompress the whole thing by a factor of 3. Make it four times longer, then further decompress it.
+What about four voice chorales? Do those two ideas at once.
+
+Here are the most interesting only looking at voices (12,16)
+
+	file        pitch	pitch	pitch	pitch	      poly-	      poly	scale 	class	      voice
+	name	      range	use	clas	entr	      phony	      rate	consist	entropy	range
+chorale_46.npy 	 47 	 32 	 12 	 4.583 	 3.891 	 1.0 	 0.837 	 3.284 	 (12, 16)
+chorale_28.npy 	 49 	 33 	 12 	 4.629 	 3.906 	 1.0 	 0.856 	 3.273 	 (12, 16)
+chorale_7.npy 	 47 	 31 	 12 	 4.559 	 3.891 	 1.0 	 0.87 	 3.228 	 (12, 16)
+chorale_64.npy 	 47 	 30 	 12 	 4.551 	 3.938 	 1.0 	 0.872 	 3.227 	 (12, 16)
+chorale_35.npy 	 47 	 28 	 12 	 4.369 	 3.867 	 1.0 	 0.862 	 3.226 	 (12, 16) I used this for v11
+chorale_44.npy 	 49 	 32 	 12 	 4.548 	 3.949 	 1.0 	 0.885 	 3.225 	 (12, 16) I didn't find this attractive
+chorale_90.npy 	 47 	 28 	 12 	 4.447 	 3.945 	 0.99	 0.866 	 3.223 	 (12, 16) I used this for v10
+
+What about putting a tiny bit of emphasis on the down beat? How can I know when the down beat is? I'll have to store it in the array somehow. Later.
+---------------------
+3/30/3022 What to get done today:
+
+      ✔ Review the ideas above that were never completed
+
+      ✔ Double up the four voice chorale to be an 8 voice chorale using the concatenate numpy function with axis = 0, since you want more voices, the first dimension, not nore motes, the second dimension.
+
+      ✔ Create a function that also increases the octave. Perhaps put it in the decompress_segment function. This is a great idea, but I need to remove it from the other place where an octave is raised in arpeggiate. And be careful you don't reduce it too much.
+     
+      ✔ Why are we not hearing from any other bosendorfer samples other than these?
+                  grep iFtable goldberg5.log | sort |uniq
+            instr 1:  iFtable = 764.000
+            When I set velocity_base to 67 instead of 69 I get 39 to 63 missing 25,31 and 78,85 , so I'm in the middle of the samples sets.
+            Spread it out more: random_velocity = velocity + rng.integers(low=-5,high=5) # this goes from -5 to 4, so I miss the 85 based samples.
+
+      ✔ Find a way to grab interesting sections, after all the decompression, arpeggiation, expansions to duplicate nearly exactly portions that could be considered the theme, sub-theme, bridge, etc in some kind of rational structure. While you are there fix the issue with only the last decompressed segment has the right steps values.
+            originally at step:	80 through	96	original length:	16	new length: 48	from	80 through	128 # <-- this in is correct
+            originally at step:	104 through	112	original length:	8	new length: 16	from	104 through	120 # <-- this one and all the rest are bad
+      I've been spending two days on this function and it's still far from successful. I'm thinking I need to chose a different course of action. Perhaps just use the contatenate function built into numpy and be done with it. Later I can figure out the locations of the repetitions. I finally got it to work. I must admit this was far more of a challenge than I thought. But now I can very easily find all the challenging parts and listen to them one at a time. What I've found so far is this chorale has very little going for it. Too much repetition and weirdness. Tried another and it also had nothing to suggests a theme of any kind. Maybe this was a blind alley, or too simplistic a theory.
+      
+      ✔ It would really help to know the time slot for a particular minutes, seconds in the output. That way you can discover the most interesting by ear, mark down the time it started and ended, and figure out the time step from that. Perhaps the  quick_play function could create a data structure containing the time steps and their minute/second value. Add bmp=50 as a parameter to piano_roll_to_midi. Set it to bpm=60 when calling from quick_play so you have an easy way to go from total seconds to the time steps around that time code. I accomplished the same thing in the notebook by creating segments and using quick_play to be able to hear them. Can be just the in_tune, or just the challenging, or any combination of the two.
+
+
+-------------------------------
+First things first. Start up the notebook server in the right directory:
+      flatpak-spawn --host toolbox enter csound
+      cd ~/Dropbox/Tutorials/coconet-pytorch
+      mamba activate gym
+      jupyter lab
+----------------------
+4/3/22 Things to get done today:
+
+      ✔ List the sorted and uniq iFtable values from the log in the csound function cross referenced with the sample names. More complicated, but much more valuable.
+      What the log file looks like: "instr 1:  iFtable = 777.000"
+      what the csd file looks like: "f777 0 0 1 "/home/prent/Dropbox/csound/samples/Bosendor/47 emp G4-.wav" 0 0 0 ; "
+      Took about three hours, maybe four. Ok, five hours to get the data lined up, but I learned a lot. Started first thing, and completed it by 3:17 in the afternoon.
+
+      ✔ Do some work on the set_mask function. Some ideas:
+            - Random masks based in rng.integers(low=0, high=2, size=(16,16), dtype=np.uint8)
+            - Some masks that are longer than 8 time_steps but hand coded to have interesting rhythmic patterns.
+                  8 split thus: 3 3 2 : 1 1 0 1 1 0 1 0 
+                  16 split thus: 2 3 4 3 2 2 : 1 0 1 1 0 1 1 1 0 1 1 0 1 0 1 0
+            I find the random mask to be the best so far! I got sick of the coded one. Because I properly coded the arpeggio section, this fix took about a minute. or two.
+--------------------
+4/4/22 To do:
+      ✔  Remove all the utility type functions from the notebooks and make them python libraries. Completed it for one notebook, made the coconet_selective_stretching.ipynb notebook into coconet_selective_stretch_library.ipynb that calls in a python library for all functions. See the python library here:
+            import selective_stretching_codes
+            import samples_used
+      And here is a python program that uses those libraries for the fastest synthesis.            
+            python test_stretch.py
+--------------------
+4/5/22 To do:      
+      🮕  Now to do the same with another notebook until they are all done and then post to github as a fork of coconet-pytorch.
+      
+      🮕  Glissandi, trills, ornamentation. This will be hard.            
+      
+      🮕  Find a way to move notes up the chain, making the bass note the tenor, the tenor into the alto, and the alto into soprano, the soporano to bass. Or the other direction. More generally, swap notes between voices: if going from bass to tenor, to alto, to soprano, add an octave, and visa versa going down. I'm not so sure that is in keeping with the coconet strategy. 
+
+      🮕  Consider two new strategies:
+            1. Make the initial expansion twice as big, so that instead of just twice as long, it's 4 times as long. But make up for that by doubling the bpm. See what that sounds like.
+            2. Consider ways to use the compress_segment function to do shrinking at times after the expansion. It might have intersting effects, much like variations. Then expand the shrunk section after shrinking. Do this many times and see what it sounds like.
+      
+      🮕  Play the wave file if you're not in a notebook:
+            play ~/Music/sflib/goldberg_aria1.wav
+----------------
+4/6/22 To Do:
+      Continue transforming previous notebooks into python libraries. Clean up the notebooks so that each one does one major function and maybe 2-3 minor variations. Assume that user will do what they want, but only if the simple things work, otherwise they are going to think you are an idiot.            
+------------------------------------------
+Summarize what each notebook does:
+1. Run the model and save it:       
+      coconet_with_initial_fixes.ipynb
+
+4. Generate many 4 voice chorales keeping only the bass of the Schmucke chorale. Stack 4 of them on ton of each other to create a 16,264 array, save that in a numpy file in a directory called 'numpy_chorales'. This can take about five minutes per chorale. I found the results less than satisfying, but it proved that it could be done.
+      coconet_generate_many_chorales.ipynb
+
+5. Genearate a ton of new 16 voice chorales with 7 segments of 32 notes each, and store them in a numpy array. These were created by taking a four part chorale, the Schmucke, and erasing one voice, and having the model recreate that voice. Do this until there are 16 voices that are all synthetic derived from the basic Schmucke chorale in some way. This can take 80+ hours to complete all 100 numpy arrays of (7,16,32). I ran this on a server so I could keep my laptop free.
+      coconet_incremental_synthesis_hp800.ipynb
+
+6. Load one saved numpy (7,16,32) synthetic chorales and generate decorated chorales as wave files using csound or fluidsynth
+      notebook: coconet_selective_stretch_library.ipynb 
+      python: test_stretch.py
+-------------------------
+Save your conda environment and recreate it elsewhere:
+      conda env export > gym_conda_environment.yml
+scp it to another system or github
+      conda env create -f gym_conda_environment.yml
+      conda activate gym      
+You now have all the software you might need.
+----------------------------------------      
