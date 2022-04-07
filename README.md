@@ -1,6 +1,6 @@
 # coconet-pytorch-csound
 
-This repo is derived from the pytorch implementation of the original coconet paper (https://arxiv.org/pdf/1903.07227.pdf) created by Kevin Donoghue: (https://github.com/kevindonoghue/coconet-pytorch). I was able to get his code to run with a few modifications. This notebook uses some of his code to train, save, and later load the model trained over 30,000 iterations.
+This repo is uses code from the pytorch implementation of the original coconet paper (https://arxiv.org/pdf/1903.07227.pdf) created by Kevin Donoghue: (https://github.com/kevindonoghue/coconet-pytorch). I was able to get his code to run with a few modifications. This notebook uses some of his code to train, save, and later load the model trained over 30,000 iterations, and to generate some variations on the chorale. 
 
 Before running the notebooks and python programs, you will need to install an environment. My preference is for Ananconda, or Miniconda. Those can be obtained from the Ananconda.org site here: https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html
 
