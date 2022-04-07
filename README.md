@@ -24,7 +24,7 @@ Here is what the current repo contains:
 ## Notebook to train the model: coconet_train_the model.ipynb
 
 This is taken almost directly from https://github.com/kevindonoghue/coconet-pytorch with a few changes to allow the training to take place without a GPU and other minor fixes. This takes about 30 hours to train. You could save 30 hours by obtaining from the author. Let me know. prent at ripnread.com.
-Or you could reduce the training cycles from 30,000 to something smaller than that. 
+Or you could reduce the training cycles from 30,000 to something smaller than that. Those who know Dropbox can obtain a copy here: https://www.dropbox.com/s/tsa95byleku5gwj/model_zipped.zip?dl=0
 
 ## Load the trained model and generate some chorales: coconet_generate_many_chorales.ipynb
 
