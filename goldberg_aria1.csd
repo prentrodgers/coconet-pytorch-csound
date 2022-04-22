@@ -80,8 +80,10 @@
  
 <CsScore> 
 ; cents for each step in the scale 
+; George secor Victorian rational well-temperament (based on Ellis #2) Ab major, Bb major, G minor
+f3 0 16 -2 0 0.0091260 0.0185738 0.0292217 0.0387788 0.0486861 0.0590156 0.0684491 0.0792180 0.0886842 0.0989189 0.1089010 0.1184236 
 ; George Secor's Victorian rational well-temperament (based on Ellis #2) in F
-f3 0 16 -2 0   0.0093653  0.0192726  0.0296021  0.0390356  0.0498045  0.0592707 
+; f3 0 16 -2 0   0.0093653  0.0192726  0.0296021  0.0390356  0.0498045  0.0592707 
  0.0695054  0.0794875  0.0890101  0.0997125  0.1091603  0.1198082 
 ; George Secor's Victorian rational well-temperament (based on Ellis #2) in C
 ; f3 0 16 -2 0  0.0094662  0.0197009  0.0296830  0.0392056  0.0499080 
@@ -446,7 +448,7 @@ f261 0 513 5 1024 384 1 ; e37- exponential - dead piano
 ; icent table iFtable#adj-(3+iSampWaveTable), 2 + iSampWaveTable ; get cents to flatten each note 
 ; iloop table iFtable#adj-(3+iSampWaveTable), 3 + iSampWaveTable ; get loop or not 
 ; finger pianos, baritone guitars, English Horn, marimba, alto flute 
-f0 275 ; this is how long csound will make the output file. Blank fills to this many seconds. Cut off to this if more.
+f0 600 ; this is how long csound will make the output file. Blank fills to this many seconds. 
 f601 0 128 -17 0 605 22 606 24 607 25 608 27 609 29 610 30 611 32 612 34 613 36 614 37 615 39 616 41 617 42 618 44 619 46 620 48 621 49 622 60 623 63 624 65 625 72 626 73 627 75 628 77 629 78 630 80 631 85 632 87 633 89 634 90 635 92 636 94 
   637 96 638 97 639 99 640 101 641 102 642 104 643 106 644 108 645 109 
 f602 0 64 -2 0  21  23  24  26  28  29  31  33  35  36  38  40  41  43  45  47  48  59  62  64  71  72  74  76  77  79  84  86  88  89  91  93  95  96  98 100 101 103 105 107 108 

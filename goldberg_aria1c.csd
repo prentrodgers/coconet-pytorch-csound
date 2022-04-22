@@ -37,7 +37,7 @@
 ;    |     + percentage of reverb vs live sound .0075 is pretty wet now
 ;    |     |       + Length of impulse response file Teatro Alcorcon in Madrid is 1.81124717553287981859410430839
 ;    |     |       |
-i1 0 320 .0085   1.81124716553287981859410430839
+i1 0 560 .0085   1.81124716553287981859410430839
 ;i1 0 2200 .0085   1.81124716553287981859410430839
 </CsScore>
 </CsoundSynthesizer>

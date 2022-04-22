@@ -1134,3 +1134,267 @@ scp it to another system or github
       conda activate gym      
 You now have all the software you might need. Or most of it. Some pip installs still are required.
 ----------------------------------------      
+4/8/22 To do:
+
+✔  Find another midi chorale to use instead of Schmucke     
+      https://www.kunstderfuge.com/bach/chorales.htm
+      Most of them start on an upbeat. I wonder how the model coped with that?
+      This one looks good. G major, no upbeats, variety of measure counts per phrase. I like it.
+      Liebster Jesu, wir sind hier (BWV 373, K 228, R 131) Dearest Jesus We are Here
+      chorales_037300b_(c)greentree.mid
+✔  Generalize expand_and_concatenate to be usable on chorales other than Schmucke. e.g. Dearest Jesus.
+      Schmucke requires:
+            segment #   from  to    
+            0           32    40 
+            1           32    40 
+            2           32    40 
+            3           32    40 
+            4           32    32
+            5           32    32
+            6           32    40
+      Dearest Jesus requires:
+            0           32    32
+            1           32    48
+            2           32    32
+            3           32    48
+            4           32    32
+            5           32    48
+      Need to find a home for these, they can't be in selective_stretching_codes.py.
+            root = 5 
+            mode = 'major'
+
+      Worked on the decompress_segment function in selective_stretching_codes.py 
+      While fixing this I noticed that the transpose_up function failed to advance the s index to the target array. Oops. That may explain why the previous work sounded so interesting!
+            new_segment[s] = transpose_up_segment(seg,root)
+            s += 1 # <-- this was missing. Hard to check that.
+      Also noticed that segment 5 was leaving a rest at the end. So I naturally thought I could change 32,48 to 32,40. No way. Now it's failing with broadcast failure. My old friend: ValueError: could not broadcast input array from shape (4,40) into shape (4,48)
+      Why is it looking for shape 4,48? Fixed that by having a temporary repository for the expanded segment, and if it was the wrong shape, pad it with zeros. 
+
+------------------
+4/10/22 To do: Lots of leftovers from prior days.
+
+✔  Move the dropouts to a it's own function. It was in decomress segment, but only where it would affect the stretched section of the segment. Big mistake there. Keep the bass octave shifts in the arpeggiate function, but make an explicit function to do dropouts. Like a layer in Keras.
+
+✔  Add more pianos, longer duration, faster performance - mostly a gross muddle, but I have ideas of how to fix it.
+
+✔  Stop using transpose_up. It's redundant. Just call transpose_up_segment. It works across all V,N matrices.
+
+-----------------------------
+4/11/22 To do: What kept you up last night?
+
+✔  I don't like the way the chorale ends so abruptly. Why are the last few beats zeros? They aren't. It's just that with the Schmucke chorale I made the last measure it's own segment, and that stretched it out. So a key piece of information, is that decompress_segment can only decompress the end of a segment. It's not able to decompress in the middle of a matrix. And it won't change the last note at all. That's weird, huh? Docmument it and move on. Also, the abrupt ending was not because of zeros at the end, it was because there were no zeros at the end. When I insert them, it suddenly holds the last note. Go figure. Also extended the last few measures:
+      trans_chorale = selective_stretching_codes.decompress_segment(trans_chorale, 248, 280)
+That's when it was of length 248, extending to 280.  
+
+✔  Get back to the feeling of Sara Bareilles the vocalist and piano player. Bouncy, positive, like you are trying to cheer yourself up. 
+
+✔  Make the initial expansion twice as big, so that instead of just twice as long, it's 4 times as long. But make up for that by doubling the bpm. See what that sounds like. Frankly, a mess.
+
+-----------------------
+4/12/22 To Do Today:
+Made some music. Liked it.
+
+--------------------------------
+4/13/22 To do Today:
+
+✔  Make some numpy arrays based on Wake Up, Wake You Sleepers. 
+current notebook on HP800: http://192.168.68.72:8889/lab?token=97ca61b595def53716fd24a0432a2900931dc5e676266f00
+
+✔  You have a gold mine in the list of in tune and challenging sections. Use it to do more than extend those sections. Use it for velocity, for example. Instead of this:
+      random_velocity = velocity + rng.integers(low=-6,high=6) # chose different sample set
+use the closeness to a transision from in tune to challenging. Make a crescendo, decrescendo based on these locations. Mix it up. Fade out at the end.   
+Start with the longest sections. 
+
+✔  So, now I see that the numbers are all screwed up. Lots of size=0 values. And continuous out of tune values. Perhaps it's due to the key of G major? I think I fixed that. But now the scores are out of whack. I think the problem was that I don't want to double the number of voices or double the number of copies of the chorale until after I've scored it and stretched it based on those scores. Then double voices, then double copies, then arpeggiate, then perform.
+
+      There are only four time steps with low scores. steps 184 - 187. That seems awfully low. It was because the chorale was almost perfectly in tune:
+      chorale_HP80044.npy 	 32 	 22 	 9 	 4.049 	 3.932 	 1.0 	 0.974 	 2.811 	 12 	 16
+      97.4% scale consistency, vs #21 which was only 84.2%
+      Compare with # 29: only 88.2% consistent
+      chorale_HP80029.npy 	 36 	 30 	 12 	 4.437 	 3.868 	 1.0 	 0.882 	 3.205 	 12 	 16
+      It has 56 time steps with scores less than 1.
+
+Something is wrong in piano_roll_to_csound 
+      piano.printMessages(cs)
+#     delay_time =  max(min_delay,len(pfields) // 20) # need enough time to prevent csound being told to stop 
+    delay_time = 20
+
+The commented line is failing. Haven't fixed that yet, but I've successfully implemented gradual crescendos on challenging sections, and gradual decrescendos on in tune sections. It's very subtle. Maybe I should make it more likely that the changes happen. Now there is just a chance they will. I increased the chance of crescendo and decreased the chance of decrescendo. I had to recover the previous version of the library and build it back up. Fixed the delay_time. It was probably interference with the line above it.
+
+-------------------------
+4/14/22 To Do Today:
+
+✔ Run several chorales voices, like 8 through the layers, and instead of doubling the same layer again, use a different set of 4 layers for each.
+      decom4x_chorale = np.concatenate((decom2x_chorale[:4,:, decom2x_chorale[4:],axis=1)
+  
+🮕 It's important to realize that decompress_segment is not limited to segments, rather its only requirement is that the input be (voices,notes), and the only part that can be extended is the ending. I don't like that limitation, but it's there. All kinds of hurt when you try to decompress in the middle. The function called expand_challenging_sections does expansion in the middle, but it only takes in complete list of sections to expand, and it does all the work inside the function. Could I externalize that?
+
+🮕 Consider ways to use the compress_segment function to do shrinking at times after the expansion. It might have intersting effects, much like variations. Then expand the shrunk section after shrinking. Do this many times and see what it sounds like. Kind of like autoencoders. 
+
+🮕  make a way to reverse a section. Too much manipulation. Create a system not an ability to make arbitrary tweeks.
+
+🮕  Glissandi, trills, ornamentation. This will be hard.            
+      
+🮕  Find a way to move notes up the chain, making the bass note the tenor, the tenor into the alto, and the alto into soprano, the soporano to bass. Or the other direction. More generally, swap notes between voices: if going from bass to tenor, to alto, to soprano, add an octave, and visa versa going down. I'm not so sure that is in keeping with the coconet strategy. Basically the np.roll implemented and tested against a chorale. What would happen? https://numpy.org/doc/stable/reference/generated/numpy.roll.html
+
+🮕  What about a different mode like my On Fire album. Choose an interesting 12 note tuning and exploit the differences. Shift every note up a certain amount into a different mode. But still use the Bach chord progressions. Doesn't have any relationship to deep learning, though.
+
+🮕  Implement lilypad in vscode. Stalled out. Maybe I can use that with muspy? Nope. But I could figure out a way to call lilypond to generate a PDF file. Abjad https://abjad.github.io/ Requires python 3.10, I have 3.9.10.
+
+🮕  Next tune to try: Wake Up, wake up you sleepers Wachet doch, erwacht, ihr Schläfer (BWV 78.7, K 188, R 297) same tune is BWV 353 Jesu, der du meine Seele.
+
+🮕  Why can't I use the wordpress uploader: Unable to create directory wp-content/uploads/2022/04. Is its parent directory writable by the server? Who knows.
+
+🮕  The way I've set up the layers, I have to very carefully rename all the intermediate steps, which is error prone. Is there a way to accomplish two goals:
+      1. allow me to re-run a cell without changeing the output. For example, if the cell doubles the length, but if I accidentally run it twice, it doubles it again. This has happened to me a lot.
+      2. Allow for quick changes of the order of the layers. Try Keras Customer Layers
+      https://www.tutorialspoint.com/keras/keras_customized_layer.htm
+      I don't think this would be helpful. It is used for training and inference, and my layers are downstream from that. 
+      
+🮕  What are your ideal layer order and why?
+      1. Load the numpy array into a variable: chorale = np.load(os.path.join('dearest_jesus_chorales','chorale_HP80029.npy')) + 30
+      2. Set the expand codes based on the original chorale: expand_codes = np.array([[32,32],[32,48],[32,32],[32,48],[32,32],[32,56]])
+      3. Restore the original phrase lengths: chorale = s.expand_and_concatenate(chorale[:,8:16,:], expand_codes)
+      4. Restore the original key: chorale = s.transpose_up_segment(chorale,root)
+I later divided the scoring and lengthening section steps 5-7 into separate paths for the [4:,:] and [:4,:]
+      5. Get the scores for each time_step: scores = s.assign_scores_to_time_steps(chorale, root, mode)
+      6. Determine the steps to expand and those to retain as is. You might want to do this once for each 4 voice chorale:
+            <code>range_of_steps = s.find_challenging_time_steps(scores)</code>
+            <code>range_in_tune = s.find_in_tune_time_steps(chorale, range_of_steps)</code>
+      7. Lengthen the challenging sections: chorale, challenging_steps, in_tune_steps = s.expand_challenging_time_steps(chorale, range_of_steps, range_in_tune, high = 15) # where high is the maximum to expand
+      8. Double the length of the chorale: chorale = np.concatenate((chorale[:4,:], chorale[4:]),axis=1) 
+      9. Double the density from 4 to 8 voices: chorale = np.concatenate((chorale,chorale),axis = 0)
+      10. Arpeggiate it: chorale = s.arpeggiate(chorale,rng.integers(low=0, high=2, size=(8,8), dtype=np.uint8),3)
+      11. Play it: s.piano_roll_to_csound(chorale,67,15,1,4,challenging_steps)
+      12. Convolve it.
+
+------------------------------------------
+4/15/22 To Do Today
+✔  Current notebook on HP800: http://192.168.68.72:8888/lab?token=59b7caa545808f687ad1d927c125f5b7c1ef7f7967a33275
+
+✔  I could really use a routine that could take a list of notes and return the octave and note name.
+
+✔  Make sure the numpy arrays have one array that is the original chorale unmodified. That way you can prove it's not actual Bach. It's smaller than the others because it's just 4 voices. I did Wake Up Sleepers as chorale_HP800100.npy. Need to do the others also.
+
+✔  Print out the amount of lengthening that was done. If it's too much repetition, reduce high=15 to something less. I found many errors in the code, and hopefully fixed them all.
+      sub_chorale, challenging_steps, in_tune_steps = s.expand_challenging_time_steps(sub_chorale, range_of_steps, range_in_tune, high = 15)
+      Information that would be useful is the amount of lengthening from the original chorale has taken place. 
+      The current report misstates the original length. You need to go back into the code and see what the dimensions mean.
+      How can challenging_steps[0,0] = -1? It's a deepcopy of range_of_steps. If the first time_step has a challenging note, then it stores -1. Bug.
+      So I've discovered some serious flaws in the expand_challenging_time_steps. I liked the sounds so I figured it was doing the right thing. 
+      
+      At this point I don't know if the scores values are correct, or if the challenging_steps are right.   
+      expand_challenging_time_steps should return integers, and it's now returning float64. I had forgotten to set dtype=int in np.empty()
+            decom_chorale = np.empty(shape=(play_chorale.shape[0],0),dtype=int) # <-- make sure you specify all empty arrays as int
+      There was one more in np.empty in print_chorale_metric_report where it didn't really matter.
+      Anyway, the values in scores are only relevant *before* the expansion performed by s.expand_challenging_time_steps
+      From then on, you can't use those anymore. Oh. That was a three hour rabbit hole.
+
+      Ok, now I'm back to fixing the challenging steps function.
+      Why does it not recognize that steps 20-31 inclusive are all challenging? It splits them up for no reason. and it starts with 19, instead of 20.
+      Finally got a working function. Glad I tested it. Did I not test it earlier? Maybe not. 
+      Or better yet, deal with the annoying repetition by making the mask other then 8 1/16th notes. Try 12. Better was 18, and make sure the 18 is in the correct dimension.
+      You need to make sure the splitting was in the function I just fixed, and not in some downstream function.
+
+      I thought I had everything figured out, then it's just repeating everything over and over again. Out of 15 minutes, the last ten are just the same chord.
+      Something happens in the last section:
+            shape of chorale after expansion of section 0. sub_chorale.shape: (4, 552)
+            shape of chorale after expansion of section 1. sub_chorale.shape: (4, 641)
+            shape of chorale after expansion of section 2. sub_chorale.shape: (4, 677) 
+
+      I had the wrong elif 1 == 2 should have been i == 2. hard to see difference between i and 1.
+-------------------
+4-18-22 To do today:
+
+✔   Taxes!
+
+
+✔  Fix the bugs:
+      For some reason it gets much quieter in the end. I thought it was the order of the voices. So I changed from 0,1,2 to 2,1,0 and it still gets quieter. I think I need to determine if the challenging steps are adding to the volume as I anticipated. Now it's out of whack again. 
+            challenging_step_count: 500	not_c_step: 2051 - doesn't match with the report numbers 
+            velocity_increases: 249	velocity_decreases: 1034 4 times as many velocity decreases as increases Why?
+            volume_increases: 237	volume_decreases: 1005 4 times as many volume decreases as increases why?
+            velocity_reset: 122 
+            volume_reset: 62
+            list of notes is 2551 long
+      In the report 0 total_challenging_steps: 428 + 374 + 413 + 1215
+                  total steps in chorale: 596 + 559 + 588 = 1743
+      This is crazy. I'm back to where I was earlier. Ending very quiet, far more decreasing volume & velocity. Was 4 times more, not closer to twice as many. It's because the challenging section check seems not be be working. Report says 1050 are challenging out of 1578 total steps, but the check in the csound function shows half as many challenging steps. challenging_step_count: 570	not_c_step: 2102
+      I wonder if it's because the zero note values are not included in the csound function, but they might be in the report.
+                  
+      I figured out the problem. The challenging_steps variable only includes the time_steps in the last run through the 3. And any attempt to concatenate them will not update the time steps. Unless I can add a constant to every step in the array.
+
+      Meanwhile, a new bug has hatched. T336.011 - note deleted.  i1 had 1 init errors - thousands of them. I allowed the velocity to rise above 73. Fixed it.      
+
+Noticed this:
+      # The following statement checks if all the members of one array match all the members of another. Pretty neat.
+      # print((synth_mix == synth_mix2).all())
+Doesn't belong in the code. It also doesn't work.
+      
+
+-------------------
+4-19-22 To do today:
+
+✔   What is the best VRWT shift of tuning for G minor? amsynth. F is good for G major. G minor is like Bb major. Ab major should be good for Bb major, which is good for G minor. It's back:  T383.007 - note deleted.  i1 had 1 init errors. It was because when I changed f3, I left it commented out. Fixed it.
+
+✔   Next up: Add a dropout before the final run @ 20%. Maybe. I think changing the mask to:
+      chorale = s.arpeggiate(chorale,rng.integers(low=0, high=2, size=(16,18), dtype=np.uint8),3)
+   fixed the issue. The final levers are the mask, and this value for high:
+      sub_chorale, challenging_steps, in_tune_steps = \
+            s.expand_challenging_time_steps(sub_chorale, range_of_steps, range_in_tune, high = 9)
+   What I'd really like to try is to not zero out quite so many of the notes. Maybe every other zero stay as one.
+   Build all zeros and another all ones. Make the ones much bigger. Join the two and call shuffle on the results.
+      Shuffle doesn't shuffle a matix properly: "This function only shuffles the array along the first axis of a multi-dimensional array."
+      So instead, I created two large flat arrays of zeros and of ones, the concatenated them into a very large flat array of both. Then called shuffle on that, and then reshape on the shuffled array into a matrix.
+      So I did that:
+            def shaded_mask(mask_shape, zero_ratio, one_ratio):
+      called this way:
+            +-- function to build a mask with variable 1's and 0's
+            |             +-- shape of the mask - 
+            |             |      +-- ratio of zeros
+            |             |      | +-- ratio of ones
+            |             |      | |  +-- mask every third time step
+            s.shaded_mask((16,18),2,6)
+      Note: the product of the shape passed to the function must be integer divisible by the sum of the next two numbers. For example, 16*18 = 288 is divisible by 8.  
+      But what I'd like is the ability to change the mask as we move through the piece. Maybe I need a mask across the 
+      whole array of notes, 
+
+✔  The most recent version goldberg_aria1-t24.mp3 sounds like it wants to be in a major key. How can I be certain that I am pulling in a G minor chorale? Yes, it's still in G minor, but this particular synthetic chorale is high in entropy. Try another.
+-----------------------------------
+4/21/22 To do Today:
+
+
+
+✔  Need an occasional high note. 
+      I need a separate function outside of arpeggiate to increase note spread. The arpeggiate is fine, but for high notes, I need more control. I'm using arpeggiate as a model, and instead of multiplying a range of the chorale times a mask, I'm adding. But I need to make sure I don't add 12 to zero, since 0 means don't play in that time step. I'd like to up the octave in a set of notes in a row of indeterminant length.
+      So, now we have a clumping factor. Which uncovers something I'd forgotten about. One note may extend over many time steps. That's what makes the arpeggiate so effective. The composer wanted one note to last over several 1/16th notes of value, with a half note, whole note, 1/8th note, whatever. So when I change just one 1/16th note, it transforms it from the middle of a held note, which is not musically very significant, into a jump of an octave, which is very significant. So even though I state in the call to octave_shift, that I want 0.2 of the notes raised by an octave, I also tell it to do so only in clumps of 8-32 notes. So the increased octaves actually affect only a very small percentage of the notes, but it does so in a way that is much more subtle. I like subtle. I found that I need to greatly increase the percent of notes, the more I increase the clumping. I might be able to get away with sometimes increasing by more than an octave. Like calling it twice in a row.
+      chorale = s.octave_shift(s.octave_shift(chorale, 0.2, 33), 0.2, 25) # 20% of the time increase the octave of a note, clump the changes in groups of 33 and 25
+      This is starting to sound interesting. #30 is especially Bach like at times.
+
+✔  I'm still seeing the 4th time through unusually quiet, and consistently so.
+      I fixed it. I changed the increment for previous_size to increment itself, not just accept the current shape.              +--- added the plus sign. One character fixed a three hour bug.
+            previous_size += sub_chorale.shape[1] 
+      I should have noticed that concat_challenging_steps was not continuous. I only looked at the first few lines, and it wasn't until the section 2, 3 that things really got out of whack, and that was when I might have noticed the discontinuity between lines 24 & 25, and 37, 38. The latter should have been bigger than the former, and it was way smaller in both cases. I can't believe how simple the fix was. One character!
+--------------------------------
+4/22/22 To Do Today:
+
+✔   Make the extensions one more. If 6, make them 7. Calculate the effect on the overall time. What is the current length. 
+      sub_chorale, challenging_steps, in_tune_steps = \
+        s.expand_challenging_time_steps(sub_chorale, range_of_steps, range_in_tune, high = 7) # now it's 7.
+Now things get weird. The csound pass created an 11:40 piece, but the convolution created only 6:15. That's not right. It's because the f0 is so high. I changed it to 7*60, for a 7 minute piece padded with silence. Now it's only 1:41! Back to an integer instead of an operation. Function tables in csound don't do math. Ok. Back to 6:51 with 7. Try for longer with 8. Try 9. Try 10. Still only 7:30 in length. What next? Pick a numpy array higher in the entropy chart: chorale_HP80080.npy lasts 9:16 as goldberg_aria1-t34.mp3. Very nice.
+
+✔  Make the upsample variable within 1 of the passed parameter.
+      new_upsample = upsample + rng.choice([-1, 0, 1]) # give it some variability
+      This is a very nice addition.
+
+✔   Move the report_expansion function into the selective_stretching or samples_used library.
+      In fact, do you really want three libraries? piano, samples_used. and selective_stretching sounds like too many.
+
+🮕  I still want to explore the np.roll function. But that is something Bach would do. Explore all the techniques Bach used. For example, retrograde, inversion, cannon, fugue. There's a whole world out there to explore. And implement in python. Later
+
+✔  Replace the old stuff on github with newer versions. Upload the new chorale numpy arrays. Fix the bugs first.
+
+✔  The endings are universally unsatisfying. I've tried several different things to fix that. The one on #31 is really nice. Very simple cadence. 32 & 33 are also quite nice. Time to purge some of the old stuff that doesn't sound as good.
+------------------------
+Next steps:
+🮕  I still want to explore the np.roll function. But that is something Bach would do. Explore all the techniques Bach used. For example, retrograde, inversion, cannon, fugue. There's a whole world out there to explore. And implement in python. Later
