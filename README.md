@@ -1,6 +1,6 @@
 # coconet-pytorch-csound
 
-This repo is uses code from the pytorch implementation of the original coconet paper (https://arxiv.org/pdf/1903.07227.pdf) created by Kevin Donoghue: (https://github.com/kevindonoghue/coconet-pytorch). I was able to get his code to run with a few modifications. This notebook uses some of his code to train, save, and later load the model trained over 30,000 iterations, and to generate some variations on the chorale. 
+This repo is uses code from the pytorch implementation of the original coconet paper (https://arxiv.org/pdf/1903.07227.pdf) created by Kevin Donoghue: (https://github.com/kevindonoghue/coconet-pytorch). I was able to get his code to run with a few modifications. This notebook uses some of his code to train, save, and later load the model trained over 30,000 iterations, and to generate some variations on the chorales. 
 
 If you are interested in hearing some examples, you can visit my web page for some recent work: http://ripnread.com/sample-page/code/fantasia-on-artificial-chorales/
 
