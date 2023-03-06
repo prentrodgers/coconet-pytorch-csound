@@ -1,6 +1,6 @@
 # coconet-pytorch-csound
 
-This repo is uses code from the pytorch implementation of the original coconet paper (https://arxiv.org/pdf/1903.07227.pdf) created by Kevin Donoghue: (https://github.com/kevindonoghue/coconet-pytorch). I was able to get his code to run with a few modifications. This notebook uses some of his code to train, save, and later load the model trained over 30,000 iterations, and to generate some variations on the chorales. 
+This repo uses code from the pytorch implementation of the original coconet paper (https://arxiv.org/pdf/1903.07227.pdf) created by Kevin Donoghue: (https://github.com/kevindonoghue/coconet-pytorch). I was able to get his code to run with a few modifications. This notebook uses some of his code to train, save, and later load the model trained over 30,000 iterations, and to generate some variations on the chorales. 
 
 If you are interested in hearing some examples, you can visit my web page for some recent work: http://ripnread.com/sample-page/code/fantasia-on-artificial-chorales/
 
@@ -14,7 +14,7 @@ Once that is installed, then issue the following command on the conda command li
       
 You will also need to install a few other programs not available through Anaconda:
 
-- fluidsynth, available from most linux distributions
+- fluidsynth, available from most linux distributions or python pip.
 - A sound font to use with fluidsynth. These are too large to include in the github repo, and are available here: https://musical-artifacts.com/?apps=fluidsynth&formats=sf2&license=free&order=top_rated&tags=soundfont I recommend the Roland soundfont, since it has most of what you would want. 
 - csound-devel - if you want to use csound to generate wave files - that's optional, since fluidsynth is capable of generating serviceable wave files from midi. I use Csound because it does a better job and supports different sample files, tuning systems, and convolution. But it can be a challenge to get working. You will also need some samples. I use a set of Bosendorfer piano samples that I paid a good deal of money for, and which are not avaiable online to my knowledge. Csound can be used to make wonderful music, but it has a steep learning curve.
 - 
